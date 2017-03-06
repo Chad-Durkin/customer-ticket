@@ -33,11 +33,20 @@ namespace Ticketizer
             List<Ticket> result = Ticket.GetAll();
             List<Ticket> testResult = new List<Ticket>{testTicket};
 
-            Console.WriteLine(result[0].GetProduct());
-            Console.WriteLine(testResult[0].GetProduct());
-
             //Assert
             Assert.Equal(result, testResult);
+        }
+
+        [Fact]
+        public void Test_Find()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket testTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            testTicket.Save();
+
+            //Assert
+            Assert.Equal(testTicket, Ticket.Find(testTicket.GetId()));
         }
 
 

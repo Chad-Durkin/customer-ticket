@@ -82,6 +82,49 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn, rdr);
         }
 
+        public static Ticket Find(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE id = @TicketId", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string nameTicket = null;
+            string addressTicket = null;
+            string phoneTicket = null;
+            string emailTicket = null;
+            string productTicket = null;
+            string descriptionTicket = null;
+            string severityTicket = null;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                nameTicket = rdr.GetString(2);
+                addressTicket = rdr.GetString(3);
+                phoneTicket = rdr.GetString(4);
+                emailTicket = rdr.GetString(5);
+                productTicket = rdr.GetString(6);
+                departmentIdTicket = rdr.GetInt32(7);
+                severityTicket = rdr.GetString(8);
+                descriptionTicket = rdr.GetString(9);
+            }
+
+            Ticket foundTicket = new Ticket(ticketNumberTicket, nameTicket, addressTicket, phoneTicket, emailTicket, productTicket, descriptionTicket, departmentIdTicket, severityTicket, idTicket);
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundTicket;
+        }
+
         public static List<Ticket> GetAll()
         {
             List<Ticket> allTickets = new List<Ticket>{};

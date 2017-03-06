@@ -181,6 +181,52 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn);
         }
 
+        public static void UpdateSeverity(int ticketId, string newSeverity)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET severity = @TicketSeverity WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketSeverity", newSeverity));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+        public static void UpdateDescription(int ticketId, string newDescription)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET description = @TicketDescription WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketDescription", newDescription));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+        public static void UpdateDepartmentId(int ticketId, int newDepartmentId)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET depart = @TicketDepartmentId WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketDepartmentId", newDepartmentId));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+
         public int GetId()
         {
             return _id;

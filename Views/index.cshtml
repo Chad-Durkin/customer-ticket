@@ -1,0 +1,27 @@
+@{
+    Layout="Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col s3">
+        <p>Departments</p>
+        <hr>
+
+    </div>
+    <div class="col s9">
+        <p>Tickets</p>
+        @if(Model["Tickets"].Count != 0)
+        {
+            foreach(var ticket in Model["Tickets"])
+            {
+                <p>Ticket Number: @ticket.GetTicketNumber() </p>
+                <p>Severity: @ticket.GetSeverity() </p>
+                <hr>
+            }
+        }
+        else
+        {
+            <p>There are no tickets in the queue</p>
+        }
+    </div>
+</div>

@@ -53,6 +53,35 @@ namespace Ticketizer
             Assert.Equal(newArticle, Article.Find(newArticle.GetId()));
         }
 
+        //Delete Test
+        [Fact]
+        public void DeleteSpecificTest()
+        {
+            Article newArticle = new Article("Fixing A Problem", date1, "Here is some article text!");
+            newArticle.Save();
+
+            Article.Delete(newArticle.GetId());
+
+            List<Article> expected = new List<Article>();
+            List<Article> actual = Article.GetAll();
+
+            Assert.Equal(expected, actual);
+        }
+
+        //Update Article Test
+        [Fact]
+        public void UpdateArticleNameTest()
+        {
+            Article newArticle = new Article("Fixing A Problem", date1, "Here is some article text!");
+            newArticle.Save();
+
+            Article.Update(newArticle.GetId(), "Here is new article text!");
+
+
+            Assert.Equal("Here is new article text!", Article.Find(newArticle.GetId()).GetText());
+        }
+
+
 
         public void Dispose()
         {

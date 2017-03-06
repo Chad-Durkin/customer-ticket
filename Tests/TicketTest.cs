@@ -49,6 +49,25 @@ namespace Ticketizer
             Assert.Equal(testTicket, Ticket.Find(testTicket.GetId()));
         }
 
+        //Delete Test
+        [Fact]
+        public void Test_DeleteSpecificTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            newTicket.Save();
+
+            //Act
+            Ticket.Delete(newTicket.GetId());
+
+            List<Ticket> expected = new List<Ticket>();
+            List<Ticket> actual = Ticket.GetAll();
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
 
         public void Dispose()
         {

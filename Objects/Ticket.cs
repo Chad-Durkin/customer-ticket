@@ -168,6 +168,19 @@ namespace Ticketizer
             return allTickets;
         }
 
+        public static void Delete(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM tickets WHERE id = @TicketId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
         public int GetId()
         {
             return _id;

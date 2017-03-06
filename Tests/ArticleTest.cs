@@ -87,12 +87,12 @@ namespace Ticketizer
             Article newArticle = new Article("Fixing A Problem", date1, "Here is some article text!");
             newArticle.Save();
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket newTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
-            testTicket.Save();
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
 
             newArticle.AddToTicket(newTicket.GetId());
             List<Ticket> actual = newArticle.GetTickets();
-            List<Ticket> expected = List<Ticket>{newTicket};
+            List<Ticket> expected = new List<Ticket>{newTicket};
 
             Assert.Equal(actual, expected);
 

@@ -90,7 +90,7 @@ namespace Ticketizer
             Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             newTicket.Save();
 
-            newArticle.AddToTicket(newTicket.GetId());
+            newArticle.ArticleToTicket(newTicket.GetId());
             List<Ticket> actual = newArticle.GetTickets();
             List<Ticket> expected = new List<Ticket>{newTicket};
 

@@ -80,7 +80,7 @@ namespace Ticketizer
             Assert.Equal("some different text", Note.Find(newNote.GetId()).GetText());
         }
 
-
+        
         public void Dispose()
         {
             Note.DeleteAll();

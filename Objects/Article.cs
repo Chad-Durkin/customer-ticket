@@ -41,7 +41,7 @@ namespace Ticketizer
         }
 
 
-        public void AddToTicket(int id)
+        public void ArticleToTicket(int id)
         {
             SqlConnection conn = DB.Connection();
             conn.Open();

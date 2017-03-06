@@ -84,6 +84,36 @@ namespace Ticketizer
             Assert.Equal("Medium", Ticket.Find(newTicket.GetId()).GetSeverity());
         }
 
+        [Fact]
+        public void UpdateTicketDescriptionTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateDepartmentId(newTicket.GetId(), 5);
+
+            //Assert
+            Assert.Equal(5, Ticket.Find(newTicket.GetId()).GetDepartmentId());
+        }
+
+        [Fact]
+        public void UpdateTicketDepartmentIdTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateDescription(newTicket.GetId(), "Laptop");
+
+            //Assert
+            Assert.Equal("Laptop", Ticket.Find(newTicket.GetId()).GetDescription());
+        }
+
 
         public void Dispose()
         {

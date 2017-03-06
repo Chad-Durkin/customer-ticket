@@ -192,7 +192,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("UPDATE tickets SET depart = @TicketDepartmentId WHERE id = @TicketId;", conn);
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET department_id = @TicketDepartmentId WHERE id = @TicketId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@TicketDepartmentId", newDepartmentId));
             cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));

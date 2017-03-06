@@ -48,6 +48,4 @@ namespace Ticketizer
         return _text;
     }
 // end Constructors and Getters
-
-
 }

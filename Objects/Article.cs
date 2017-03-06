@@ -40,6 +40,37 @@ namespace Ticketizer
             return _text;
         }
 
+
+        public void AddToTicket(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets_articles (ticket_id, article_id) VALUES (@TicketId, @ArticleId);", conn);
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id);
+            cmd.Parameters.Add(new SqlParameter("@ArticleId", this.GetId()));
+
+            cmd.ExecuteNoneQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
+        public List<Ticket> GetTickets()
+        {
+            List<Ticket> foundTicket = new List<Ticket>
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT tickets.* from tickets JOIN tickets_articles ON(tickets.id == tickets_articles.ticket_id) JOIN articles ON (articles.id == tickets_articles.article_id) WHERE articles.id = @ArticleId;", conn);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+
+            DB.CloseSqlConnection(conn);
+
+        }
+
         public void Save()
         {
             SqlConnection conn = DB.Connection();

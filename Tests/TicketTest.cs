@@ -26,18 +26,92 @@ namespace Ticketizer
         {
             //Arrange
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket testTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            Ticket testTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             testTicket.Save();
 
             //Act
             List<Ticket> result = Ticket.GetAll();
             List<Ticket> testResult = new List<Ticket>{testTicket};
 
-            Console.WriteLine(result[0].GetProduct());
-            Console.WriteLine(testResult[0].GetProduct());
-
             //Assert
             Assert.Equal(result, testResult);
+        }
+
+        [Fact]
+        public void Test_Find()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket testTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            testTicket.Save();
+
+            //Assert
+            Assert.Equal(testTicket, Ticket.Find(testTicket.GetId()));
+        }
+
+        //Delete Test
+        [Fact]
+        public void Test_DeleteSpecificTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.Delete(newTicket.GetId());
+
+            List<Ticket> expected = new List<Ticket>();
+            List<Ticket> actual = Ticket.GetAll();
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
+        //Update Ticket Test
+        [Fact]
+        public void UpdateTicketSeverityTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateSeverity(newTicket.GetId(), "Medium");
+
+            //Assert
+            Assert.Equal("Medium", Ticket.Find(newTicket.GetId()).GetSeverity());
+        }
+
+        [Fact]
+        public void UpdateTicketDescriptionTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateDepartmentId(newTicket.GetId(), 5);
+
+            //Assert
+            Assert.Equal(5, Ticket.Find(newTicket.GetId()).GetDepartmentId());
+        }
+
+        [Fact]
+        public void UpdateTicketDepartmentIdTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateDescription(newTicket.GetId(), "Laptop");
+
+            //Assert
+            Assert.Equal("Laptop", Ticket.Find(newTicket.GetId()).GetDescription());
         }
 
 

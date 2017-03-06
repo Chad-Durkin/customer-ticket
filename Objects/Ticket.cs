@@ -10,24 +10,18 @@ namespace Ticketizer
         private int _id;
         private DateTime _ticketNumber;
         private int _departmentId;
-        private string _name;
-        private string _address;
-        private string _phone;
-        private string _email;
         private string _product;
         private string _description;
         private string _severity;
+        private int _userId;
 
-        public Ticket(DateTime ticketNumber, string name, string address, string phone, string email, string product, string description, int departmentId, string severity = "low", int id = 0)
+        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0)
         {
             _id = id;
             _ticketNumber = ticketNumber;
             _departmentId = departmentId;
-            _name = name;
-            _address = address;
-            _phone = phone;
-            _email = email;
             _product = product;
+            _userId = userId;
             _description = description;
             _severity = severity;
         }
@@ -43,15 +37,12 @@ namespace Ticketizer
                 Ticket newTicket = (Ticket) otherTicket;
                 bool idEquality = this.GetId() == newTicket.GetId();
                 bool ticketNumberEquality = this.GetTicketNumber() == newTicket.GetTicketNumber();
-                bool nameEquality = this.GetName() == newTicket.GetName();
-                bool addressEquality = this.GetAddress() == newTicket.GetAddress();
-                bool phoneEquality = this.GetPhone() == newTicket.GetPhone();
-                bool emailEquality = this.GetEmail() == newTicket.GetEmail();
                 bool productEquality = this.GetProduct() == newTicket.GetProduct();
                 bool departmentIdEquality = this.GetDepartmentId() == newTicket.GetDepartmentId();
+                bool userIdEquality = this.GetUserId() == newTicket.GetUserId();
                 bool severityEquality = this.GetSeverity() == newTicket.GetSeverity();
                 bool descriptionEquality = this.GetDescription() == newTicket.GetDescription();
-                return (idEquality && ticketNumberEquality && nameEquality && addressEquality && phoneEquality && emailEquality && productEquality && departmentIdEquality && severityEquality && descriptionEquality);
+                return (idEquality && ticketNumberEquality && productEquality && departmentIdEquality && userIdEquality && severityEquality && descriptionEquality);
             }
         }
 
@@ -60,15 +51,12 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, name, address, phone, email, product, department_id, severity, description) OUTPUT INSERTED.id VALUES (@ticketNumber, @name, @address, @phone, @email, @product, @departmentId, @severity, @description);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, product, department_id, user_Id, severity, description) OUTPUT INSERTED.id VALUES (@ticketNumber, @product, @departmentId, @userId, @severity, @description);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@ticketNumber", this.GetTicketNumber()));
-            cmd.Parameters.Add(new SqlParameter("@name", this.GetName()));
-            cmd.Parameters.Add(new SqlParameter("@address", this.GetAddress()));
-            cmd.Parameters.Add(new SqlParameter("@phone", this.GetPhone()));
-            cmd.Parameters.Add(new SqlParameter("@email", this.GetEmail()));
             cmd.Parameters.Add(new SqlParameter("@product", this.GetProduct()));
             cmd.Parameters.Add(new SqlParameter("@departmentId", this.GetDepartmentId()));
+            cmd.Parameters.Add(new SqlParameter("@userId", this.GetUserId()));
             cmd.Parameters.Add(new SqlParameter("@severity", this.GetSeverity()));
             cmd.Parameters.Add(new SqlParameter("@description", this.GetDescription()));
 
@@ -80,6 +68,43 @@ namespace Ticketizer
             }
 
             DB.CloseSqlConnection(conn, rdr);
+        }
+
+        public static Ticket Find(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE id = @TicketId", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string productTicket = null;
+            string descriptionTicket = null;
+            int userIdTicket = 0;
+            string severityTicket = null;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+            }
+
+            Ticket foundTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket);
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundTicket;
         }
 
         public static List<Ticket> GetAll()
@@ -96,11 +121,8 @@ namespace Ticketizer
             int idTicket = 0;
             DateTime ticketNumberTicket = new DateTime();
             int departmentIdTicket = 0;
-            string nameTicket = null;
-            string addressTicket = null;
-            string phoneTicket = null;
-            string emailTicket = null;
             string productTicket = null;
+            int userIdTicket = 0;
             string descriptionTicket = null;
             string severityTicket = null;
 
@@ -108,21 +130,77 @@ namespace Ticketizer
             {
                 idTicket = rdr.GetInt32(0);
                 ticketNumberTicket = rdr.GetDateTime(1);
-                nameTicket = rdr.GetString(2);
-                addressTicket = rdr.GetString(3);
-                phoneTicket = rdr.GetString(4);
-                emailTicket = rdr.GetString(5);
-                productTicket = rdr.GetString(6);
-                departmentIdTicket = rdr.GetInt32(7);
-                severityTicket = rdr.GetString(8);
-                descriptionTicket = rdr.GetString(9);
-                Ticket newTicket = new Ticket(ticketNumberTicket, nameTicket, addressTicket, phoneTicket, emailTicket, productTicket, descriptionTicket, departmentIdTicket, severityTicket, idTicket);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket);
                 allTickets.Add(newTicket);
             }
 
             DB.CloseSqlConnection(conn, rdr);
 
             return allTickets;
+        }
+
+        public static void Delete(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM tickets WHERE id = @TicketId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
+        public static void UpdateSeverity(int ticketId, string newSeverity)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET severity = @TicketSeverity WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketSeverity", newSeverity));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+        public static void UpdateDescription(int ticketId, string newDescription)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET description = @TicketDescription WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketDescription", newDescription));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+        public static void UpdateDepartmentId(int ticketId, int newDepartmentId)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET department_id = @TicketDepartmentId WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketDepartmentId", newDepartmentId));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
         }
 
         public int GetId()
@@ -150,38 +228,6 @@ namespace Ticketizer
         {
             _departmentId = id;
         }
-        public string GetName()
-        {
-            return _name;
-        }
-        public void SetName(string name)
-        {
-            _name = name;
-        }
-        public string GetAddress()
-        {
-            return _address;
-        }
-        public void SetAddress(string address)
-        {
-            _address = address;
-        }
-        public string GetPhone()
-        {
-            return _phone;
-        }
-        public void SetPhone(string phone)
-        {
-            _phone = phone;
-        }
-        public string GetEmail()
-        {
-            return _email;
-        }
-        public void SetEmail(string email)
-        {
-            _email = email;
-        }
         public string GetProduct()
         {
             return _product;
@@ -189,6 +235,14 @@ namespace Ticketizer
         public void SetProduct(string product)
         {
             _product = product;
+        }
+        public int GetUserId()
+        {
+            return _userId;
+        }
+        public void SetUserId(int userId)
+        {
+            _userId = userId;
         }
         public string GetSeverity()
         {

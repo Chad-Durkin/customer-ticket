@@ -26,7 +26,7 @@ namespace Ticketizer
         {
             //Arrange
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket testTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            Ticket testTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             testTicket.Save();
 
             //Act
@@ -42,7 +42,7 @@ namespace Ticketizer
         {
             //Arrange
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket testTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            Ticket testTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             testTicket.Save();
 
             //Assert
@@ -55,7 +55,7 @@ namespace Ticketizer
         {
             //Arrange
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket newTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             newTicket.Save();
 
             //Act
@@ -74,7 +74,7 @@ namespace Ticketizer
         {
             //Arrange
             DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
-            Ticket newTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             newTicket.Save();
 
             //Act

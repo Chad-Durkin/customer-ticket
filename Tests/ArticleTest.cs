@@ -81,6 +81,24 @@ namespace Ticketizer
             Assert.Equal("Here is new article text!", Article.Find(newArticle.GetId()).GetText());
         }
 
+        [Fact]
+        public void Add_KnowledgeArticleToTicket()
+        {
+            Article newArticle = new Article("Fixing A Problem", date1, "Here is some article text!");
+            newArticle.Save();
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
+            testTicket.Save();
+
+            newArticle.AddToTicket(newTicket.GetId());
+            List<Ticket> actual = newArticle.GetTickets();
+            List<Ticket> expected = List<Ticket>{newTicket};
+
+            Assert.Equal(actual, expected);
+
+
+        }
+
 
 
         public void Dispose()

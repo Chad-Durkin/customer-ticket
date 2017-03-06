@@ -51,6 +51,34 @@ namespace Ticketizer
             Assert.Equal(newDepartment, Department.Find(newDepartment.GetId()));
         }
 
+        //Delete Test
+        [Fact]
+        public void DeleteSpecificTest()
+        {
+            Department newDepartment = new Department("Sales");
+            newDepartment.Save();
+
+            Department.Delete(newDepartment.GetId());
+
+            List<Department> expected = new List<Department>();
+            List<Department> actual = Department.GetAll();
+
+            Assert.Equal(expected, actual);
+        }
+
+        //Update Department Test
+        [Fact]
+        public void UpdateDepartmentNameTest()
+        {
+            Department newDepartment = new Department("Sales");
+            newDepartment.Save();
+
+            Department.Update(newDepartment.GetId(), "Repair");
+
+
+            Assert.Equal("Repair", Department.Find(newDepartment.GetId()).GetName());
+        }
+
 
         public void Dispose()
         {

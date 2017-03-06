@@ -51,6 +51,34 @@ namespace Ticketizer
             Assert.Equal(newAdmin, Admin.Find(newAdmin.GetId()));
         }
 
+        //Delete Test
+        [Fact]
+        public void DeleteSpecificTest()
+        {
+            Admin newAdmin = new Admin("Johnny English");
+            newAdmin.Save();
+
+            Admin.Delete(newAdmin.GetId());
+
+            List<Admin> expected = new List<Admin>();
+            List<Admin> actual = Admin.GetAll();
+
+            Assert.Equal(expected, actual);
+        }
+
+        //Update Admin Test
+        [Fact]
+        public void UpdateAdminNameTest()
+        {
+            Admin newAdmin = new Admin("Johnny English");
+            newAdmin.Save();
+
+            Admin.Update(newAdmin.GetId(), "Jenny English");
+
+
+            Assert.Equal("Jenny English", Admin.Find(newAdmin.GetId()).GetName());
+        }
+
 
         public void Dispose()
         {

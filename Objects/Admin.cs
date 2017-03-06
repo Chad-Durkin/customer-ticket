@@ -30,7 +30,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO departments (name) OUTPUT INSERTED.id VALUES (@AdminName);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO admins (name) OUTPUT INSERTED.id VALUES (@AdminName);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@AdminName", this.GetName()));
 
@@ -49,7 +49,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM departments WHERE id = @AdminId;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM admins WHERE id = @AdminId;", conn);
 
             cmd.Parameters.Add(new SqlParameter("@AdminId", id));
 
@@ -78,7 +78,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM departments ORDER BY name;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM admins ORDER BY name;", conn);
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -95,12 +95,41 @@ namespace Ticketizer
             return allAdmins;
         }
 
+
+        public static void Update(int id, string newName)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE admins SET name = @NewName OUTPUT INSERTED.name WHERE id = @AdminId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@NewName", newName));
+            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+
+        public static void Delete(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM admins WHERE id = @AdminId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
         public static void DeleteAll()
         {
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("DELETE FROM departments;", conn);
+            SqlCommand cmd = new SqlCommand("DELETE FROM admins;", conn);
 
             cmd.ExecuteNonQuery();
 

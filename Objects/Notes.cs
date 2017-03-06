@@ -160,6 +160,34 @@ namespace Ticketizer
             }
 
         }
+
+        public static void Update(int id, string newText)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE notes SET text = @NewText WHERE id = @NoteId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@NewText", newText));
+            cmd.Parameters.Add(new SqlParameter("@NoteId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+
+        public static void Delete(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM notes WHERE id = @NoteId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@NoteId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
     }
 
 }

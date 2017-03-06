@@ -95,6 +95,34 @@ namespace Ticketizer
             return allDepartments;
         }
 
+        public static void Update(int id, string newName)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE departments SET name = @NewName OUTPUT INSERTED.name WHERE id = @DepartmentId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@NewName", newName));
+            cmd.Parameters.Add(new SqlParameter("@DepartmentId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+
+        }
+
+        public static void Delete(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("DELETE FROM departments WHERE id = @DepartmentId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@DepartmentId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
         public static void DeleteAll()
         {
             SqlConnection conn = DB.Connection();
@@ -106,6 +134,7 @@ namespace Ticketizer
 
             DB.CloseSqlConnection(conn);
         }
+
 
         public override bool Equals(System.Object otherDepartment)
         {

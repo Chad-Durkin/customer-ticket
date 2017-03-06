@@ -53,6 +53,33 @@ namespace Ticketizer
             Assert.Equal(newNote, Note.Find(newNote.GetId()));
         }
 
+        [Fact]
+        public void DeleteSpecificTest()
+        {
+            Note newNote = new Note(date1, 1, 1, "Here is some note text!");
+            newNote.Save();
+
+            Note.Delete(newNote.GetId());
+
+            List<Note> expected = new List<Note>();
+            List<Note> actual = Note.GetAll();
+
+            Assert.Equal(expected, actual);
+        }
+
+        //Update Note Test
+        [Fact]
+        public void UpdateNoteNameTest()
+        {
+            Note newNote = new Note(date1, 1, 1, "Here is some note text!");
+            newNote.Save();
+
+            Note.Update(newNote.GetId(), "some different text");
+
+
+            Assert.Equal("some different text", Note.Find(newNote.GetId()).GetText());
+        }
+
 
         public void Dispose()
         {

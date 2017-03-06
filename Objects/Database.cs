@@ -11,7 +11,7 @@ namespace Ticketizer
             return conn;
         }
 
-        public static void CloseSqlConnection(SqlConnection connection, SqlConnection reader = null)
+        public static void CloseSqlConnection(SqlConnection connection, SqlDataReader reader = null)
         {
             if (reader != null)
             {

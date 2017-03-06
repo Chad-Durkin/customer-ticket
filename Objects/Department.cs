@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data;
 using System;
 
 namespace Ticketizer
 {
-    public class Admin
+    public class Department
     {
         private int _id;
         private string _name;
 
-        public Admin(string name, int id = 0)
+        public Department(string name, int id = 0)
         {
             _id = id;
             _name = name;
@@ -31,9 +30,9 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO admins (name) OUTPUT INSERTED.id VALUES (@AdminName);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO departments (name) OUTPUT INSERTED.id VALUES (@DepartmentName);", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@AdminName", this.GetName()));
+            cmd.Parameters.Add(new SqlParameter("@DepartmentName", this.GetName()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -45,14 +44,14 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn, rdr);
         }
 
-        public static Admin Find(int id)
+        public static Department Find(int id)
         {
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM admins WHERE id = @AdminId;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM departments WHERE id = @DepartmentId;", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+            cmd.Parameters.Add(new SqlParameter("@DepartmentId", id));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -65,21 +64,21 @@ namespace Ticketizer
                 foundName = rdr.GetString(1);
             }
 
-            Admin foundAdmin = new Admin(foundName, foundId);
+            Department foundDepartment = new Department(foundName, foundId);
 
             DB.CloseSqlConnection(conn, rdr);
 
-            return foundAdmin;
+            return foundDepartment;
         }
 
-        public static List<Admin> GetAll()
+        public static List<Department> GetAll()
         {
-            List<Admin> allAdmins = new List<Admin>();
+            List<Department> allDepartments = new List<Department>();
 
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM admins ORDER BY name;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM departments ORDER BY name;", conn);
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -87,24 +86,23 @@ namespace Ticketizer
             {
                 int foundId = rdr.GetInt32(0);
                 string foundName = rdr.GetString(1);
-                Admin foundAdmin = new Admin(foundName, foundId);
-                allAdmins.Add(foundAdmin);
+                Department foundDepartment = new Department(foundName, foundId);
+                allDepartments.Add(foundDepartment);
             }
 
             DB.CloseSqlConnection(conn, rdr);
 
-            return allAdmins;
+            return allDepartments;
         }
-
 
         public static void Update(int id, string newName)
         {
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("UPDATE admins SET name = @NewName OUTPUT INSERTED.name WHERE id = @AdminId;", conn);
+            SqlCommand cmd = new SqlCommand("UPDATE departments SET name = @NewName OUTPUT INSERTED.name WHERE id = @DepartmentId;", conn);
             cmd.Parameters.Add(new SqlParameter("@NewName", newName));
-            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+            cmd.Parameters.Add(new SqlParameter("@DepartmentId", id));
 
             cmd.ExecuteNonQuery();
 
@@ -117,8 +115,8 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("DELETE FROM admins WHERE id = @AdminId;", conn);
-            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+            SqlCommand cmd = new SqlCommand("DELETE FROM departments WHERE id = @DepartmentId;", conn);
+            cmd.Parameters.Add(new SqlParameter("@DepartmentId", id));
 
             cmd.ExecuteNonQuery();
 
@@ -130,24 +128,25 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("DELETE FROM admins;", conn);
+            SqlCommand cmd = new SqlCommand("DELETE FROM departments;", conn);
 
             cmd.ExecuteNonQuery();
 
             DB.CloseSqlConnection(conn);
         }
 
-        public override bool Equals(System.Object otherAdmin)
+
+        public override bool Equals(System.Object otherDepartment)
         {
-            if(!(otherAdmin is Admin))
+            if(!(otherDepartment is Department))
             {
                 return false;
             }
             else
             {
-                Admin newAdmin = (Admin) otherAdmin;
-                bool idEquality = this.GetId() == newAdmin.GetId();
-                bool nameEquality = this.GetName() == newAdmin.GetName();
+                Department newDepartment = (Department) otherDepartment;
+                bool idEquality = this.GetId() == newDepartment.GetId();
+                bool nameEquality = this.GetName() == newDepartment.GetName();
                 return (idEquality && nameEquality);
             }
 

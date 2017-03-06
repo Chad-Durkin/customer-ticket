@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
 using System;
 
 namespace Ticketizer
@@ -17,10 +18,10 @@ namespace Ticketizer
         private string _description;
         private string _severity;
 
-        public Ticket(ticketNumber, departmentId, name, address, phone, email, product, description, severity = null, id = 0)
+        public Ticket(DateTime ticketNumber, string name, string address, string phone, string email, string product, string description, int departmentId, string severity = "low", int id = 0)
         {
             _id = id;
-            _ticketNumber = tickNumber;
+            _ticketNumber = ticketNumber;
             _departmentId = departmentId;
             _name = name;
             _address = address;
@@ -47,9 +48,10 @@ namespace Ticketizer
                 bool phoneEquality = this.GetPhone() == newTicket.GetPhone();
                 bool emailEquality = this.GetEmail() == newTicket.GetEmail();
                 bool productEquality = this.GetProduct() == newTicket.GetProduct();
+                bool departmentIdEquality = this.GetDepartmentId() == newTicket.GetDepartmentId();
                 bool severityEquality = this.GetSeverity() == newTicket.GetSeverity();
                 bool descriptionEquality = this.GetDescription() == newTicket.GetDescription();
-                return (idEquality && ticketNumberEquality && nameEquality && addressEquality && phoneEquality && emailEquality && productEquality && severityEquality && descriptionEquality);
+                return (idEquality && ticketNumberEquality && nameEquality && addressEquality && phoneEquality && emailEquality && productEquality && departmentIdEquality && severityEquality && descriptionEquality);
             }
         }
 
@@ -58,17 +60,17 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, department_id, name, address, phone, email, product, description, severity) OUPUT INSERTED.id VALUES (@ticketNumber, @departmentId, @name, @address, @phone, @email, @product, @description, @severity);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, name, address, phone, email, product, department_id, severity, description) OUTPUT INSERTED.id VALUES (@ticketNumber, @name, @address, @phone, @email, @product, @departmentId, @severity, @description);", conn);
 
-            cmd.Parameters.Add(new SqlParameters("@ticketNumber", this.GetTicketNumber()));
-            cmd.Parameters.Add(new SqlParameters("@departmentId", this.GetDepartmentId()));
-            cmd.Parameters.Add(new SqlParameters("@name", this.GetName()));
-            cmd.Parameters.Add(new SqlParameters("@address", this.GetAddress()));
-            cmd.Parameters.Add(new SqlParameters("@phone", this.GetPhone()));
-            cmd.Parameters.Add(new SqlParameters("@email", this.GetEmail()));
-            cmd.Parameters.Add(new SqlParameters("@product", this.GetProduct()));
-            cmd.Parameters.Add(new SqlParameters("@description", this.GetDescription()));
-            cmd.Parameters.Add(new SqlParameters("@severity", this.GetSeverity()));
+            cmd.Parameters.Add(new SqlParameter("@ticketNumber", this.GetTicketNumber()));
+            cmd.Parameters.Add(new SqlParameter("@name", this.GetName()));
+            cmd.Parameters.Add(new SqlParameter("@address", this.GetAddress()));
+            cmd.Parameters.Add(new SqlParameter("@phone", this.GetPhone()));
+            cmd.Parameters.Add(new SqlParameter("@email", this.GetEmail()));
+            cmd.Parameters.Add(new SqlParameter("@product", this.GetProduct()));
+            cmd.Parameters.Add(new SqlParameter("@departmentId", this.GetDepartmentId()));
+            cmd.Parameters.Add(new SqlParameter("@severity", this.GetSeverity()));
+            cmd.Parameters.Add(new SqlParameter("@description", this.GetDescription()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -80,7 +82,7 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn, rdr);
         }
 
-        public List<Ticket> GetAll()
+        public static List<Ticket> GetAll()
         {
             List<Ticket> allTickets = new List<Ticket>{};
 
@@ -106,15 +108,15 @@ namespace Ticketizer
             {
                 idTicket = rdr.GetInt32(0);
                 ticketNumberTicket = rdr.GetDateTime(1);
-                departmentIdTicket = rdr.GetInt32(2);
-                nameTicket = rdr.GetString(3);
-                addressTicket = rdr.GetString(4);
-                phoneTicket = rdr.GetString(5);
-                emailTicket = rdr.GetString(6);
-                productTicket = rdr.GetString(7);
-                descriptionTicket = rdr.GetString(8);
-                severityTicket = rdr.GetString(9);
-                Ticket newTicket = new Ticket(ticketNumberTicket, departmentIdTicket, nameTicket, addressTicket, phoneTicket, emailTicket, productTicket, descriptionTicket, severityTicket, idTicket);
+                nameTicket = rdr.GetString(2);
+                addressTicket = rdr.GetString(3);
+                phoneTicket = rdr.GetString(4);
+                emailTicket = rdr.GetString(5);
+                productTicket = rdr.GetString(6);
+                departmentIdTicket = rdr.GetInt32(7);
+                severityTicket = rdr.GetString(8);
+                descriptionTicket = rdr.GetString(9);
+                Ticket newTicket = new Ticket(ticketNumberTicket, nameTicket, addressTicket, phoneTicket, emailTicket, productTicket, descriptionTicket, departmentIdTicket, severityTicket, idTicket);
                 allTickets.Add(newTicket);
             }
 
@@ -136,7 +138,7 @@ namespace Ticketizer
         {
             return _ticketNumber;
         }
-        public void SetTicketNumber()
+        public void SetTicketNumber(DateTime ticketNumber)
         {
             _ticketNumber = ticketNumber;
         }
@@ -206,9 +208,9 @@ namespace Ticketizer
         }
 
 
-        public void DeleteAll()
+        public static void DeleteAll()
         {
-            DB.TableDeleteAll("tickets")
+            DB.TableDeleteAll("tickets");
         }
     }
 }

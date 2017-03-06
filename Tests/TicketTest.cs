@@ -24,21 +24,27 @@ namespace Ticketizer
         [Fact]
         public void Test_Save()
         {
-            DateTime TicketNumber = DateTime.Now;
-            Ticket testTicket = new Ticket(TicketNumber, 3, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs");
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket testTicket = new Ticket(TicketNumber, "John", "2000 EastLake", "5555555555", "john@someMail.com", "Computer", "Bugs", 3);
             testTicket.Save();
 
+            //Act
             List<Ticket> result = Ticket.GetAll();
-            List<Ticket> testResukt = new List<Ticket>{testTicket};
+            List<Ticket> testResult = new List<Ticket>{testTicket};
 
+            Console.WriteLine(result[0].GetProduct());
+            Console.WriteLine(testResult[0].GetProduct());
+
+            //Assert
             Assert.Equal(result, testResult);
         }
 
 
-        public Dispose()
+        public void Dispose()
         {
-            Admin.DeleteAll();
             Ticket.DeleteAll();
+            Admin.DeleteAll();
         }
     }
 }

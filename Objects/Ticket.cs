@@ -172,6 +172,7 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn);
 
         }
+
         public static void UpdateDescription(int ticketId, string newDescription)
         {
             SqlConnection conn = DB.Connection();
@@ -187,6 +188,7 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn);
 
         }
+
         public static void UpdateDepartmentId(int ticketId, int newDepartmentId)
         {
             SqlConnection conn = DB.Connection();
@@ -201,6 +203,50 @@ namespace Ticketizer
 
             DB.CloseSqlConnection(conn);
 
+        }
+
+        public void AddAdmin(int id)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets_admins (ticket_id, admin_id) VALUES (@TicketId, @AdminId);", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketId", this.GetId()));
+            cmd.Parameters.Add(new SqlParameter("@AdminId", id));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
+        public List<Admin> GetAdmins()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT admins.* FROM tickets JOIN tickets_admins ON (tickets.id = tickets_admins.ticket_id) JOIN admins ON (tickets_admins.admin_id = admins.id) WHERE tickets.id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketId", this.GetId()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int adminId = 0;
+            string adminName = null;
+            List<Admin> allAdmins = new List<Admin>{};
+
+            while(rdr.Read())
+            {
+                adminId = rdr.GetInt32(0);
+                adminName = rdr.GetString(1);
+                Admin foundAdmin = new Admin(adminName, adminId);
+                allAdmins.Add(foundAdmin);
+            }
+
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return allAdmins;
         }
 
         public int GetId()

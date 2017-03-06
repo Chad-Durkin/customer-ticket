@@ -113,6 +113,24 @@ namespace Ticketizer
             //Assert
             Assert.Equal("Laptop", Ticket.Find(newTicket.GetId()).GetDescription());
         }
+        [Fact]
+        public void Test_AddAdminToTicket()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            Admin newAdmin = new Admin("Johnny English");
+            newAdmin.Save();
+
+            //Act
+            newTicket.AddAdmin(newAdmin.GetId());
+            int result = newTicket.GetAdmins().Count;
+
+            //Assert
+            Assert.Equal(1, result);
+        }
 
 
         public void Dispose()

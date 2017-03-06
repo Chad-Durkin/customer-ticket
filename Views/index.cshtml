@@ -6,7 +6,17 @@
     <div class="col s3">
         <p>Departments</p>
         <hr>
-
+        @if(Model["Departments"].Count != 0)
+        {
+            foreach(var department in Model["Departments"])
+            {
+                <p>@department.GetName()</p>
+            }
+        }
+        else
+        {
+            <p>There are no departments in the queue</p>
+        }
     </div>
     <div class="col s9">
         <p>Tickets</p>

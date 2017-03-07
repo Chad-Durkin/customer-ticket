@@ -97,6 +97,15 @@ namespace Ticketizer
             Assert.Equal(true, Admin.VerifyLogin(testAdmin.GetUsername(), testAdmin.GetPassword()));
         }
 
+        [Fact]
+        public void FindByUsername_ReturnAdminByUsername()
+        {
+            Admin testAdmin = new Admin("Johnny English", "007", "demo11");
+            testAdmin.Save();
+
+            Assert.Equal(testAdmin, Admin.FindByUsername(testAdmin.GetUsername()));
+        }
+
         public void Dispose()
         {
             Admin.DeleteAll();

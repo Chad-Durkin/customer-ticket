@@ -12,32 +12,31 @@ namespace Ticketizer
         {
 
             Get["/"] = _ => {
-                // if(CurrentUser.GetVerify() == true)
-                // {
+
+                CurrentUser thisCurrentUser = new CurrentUser(1, false);
+                if(thisCurrentUser.GetVerify() == true)
+                {
                     return View["index.cshtml", ModelMaker()];
-                // }
-                // else
-                // {
-                //     return View["login.cshtml"];
-                // }
+                }
+                else
+                {
+                    return View["login.cshtml"];
+                }
             };
 
-            // Post["/login"] = _ =>
-            // {
-            //     if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
-            //     {
-            //
-            //         CurrentUser thisCurrentUser = new CurrentUser();
-            //     }
-            //     if(CurrentUser.GetVerify() == true)
-            //     {
-            //         return View["index.cshtml", ModelMaker()];
-            //     }
-            //     else
-            //     {
-            //         return View["login.cshtml"];
-            //     }
-            // };
+            Post["/login"] = _ =>
+            {
+                if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
+                {
+
+                    CurrentUser thisCurrentUser = new CurrentUser(Request.Form["user-name"], Request.Form["password"]);
+                    if(thisCurrentUser.GetVerify() == true)
+                    {
+                        return View["index.cshtml", ModelMaker()];
+                    }
+                }
+                return View["login.cshtml"];
+            };
             //add dept
             Post["/add-department"] = _ => {
                 Department newDepartment = new Department(Request.Form["department-name"]);

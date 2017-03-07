@@ -1,0 +1,11 @@
+@{
+    Layout="Shared/_Layout.cshtml";
+}
+
+@if(Model["Articles"].Count != 0)
+{
+    @foreach(var article in Model["Articles"])
+    {
+        <a href="/ticket/@Model["TicketId"]/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
+    }    
+}

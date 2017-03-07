@@ -11,7 +11,7 @@ namespace Ticketizer
         private bool _verified;
         private int _adminId;
 
-        public CurrentUser(bool verify, int adminId, int id = 0)
+        public CurrentUser(int adminId, bool verify = false, int id = 0)
         {
             _id = id;
             _verified = verify;
@@ -23,7 +23,7 @@ namespace Ticketizer
             return _id;
         }
 
-        public bool GetVerify()
+        public static bool GetVerify()
         {
             return _verified;
         }

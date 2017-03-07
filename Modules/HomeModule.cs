@@ -47,9 +47,33 @@ namespace Ticketizer
                 model.Add("Ticket", Ticket.Find(parameters.id));
                 model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
                 model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
+                model.Add("Notes", Note.GetAll(parameters.id));
 
                 return View["ticket.cshtml", model];
 
+            };
+
+            Patch["/ticket/{id}"] = parameters => {
+                if(Request.Form["open-status"] == 0)
+                {
+                    Ticket.CloseTicket(parameters.id);
+                }
+
+                User.Update(Request.Form["user-id"], Request.Form["name"], Request.Form["address"], Request.Form["phone"], Request.Form["email"]);
+
+                Ticket.UpdateSeverity(parameters.id, Request.Form["severity"]);
+                Ticket.UpdateDepartmentId(parameters.id, Request.Form["department-id"]);
+                Ticket.UpdateDescription(parameters.id, Request.Form["description"]);
+                Ticket.UpdateStatus(parameters.id, Request.Form["current-status"]);
+
+
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("Ticket", Ticket.Find(parameters.id));
+                model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
+                model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
+                model.Add("Notes", Note.GetAll(parameters.id));
+
+                return View["ticket.cshtml", model];
             };
 
         }

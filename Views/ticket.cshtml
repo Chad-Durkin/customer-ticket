@@ -1,37 +1,73 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
+<div class="row">
+    <div class="col s6">
+        <h3>Ticket#: @Model["Ticket"].GetTicketNumber()</h3>
+        <form class="" action="/ticket/@Model["Ticket"].GetId()" method="post">
+            <input type="hidden" name="_method" value="PATCH">
+            <input type="hidden" name="user-id" value="@Model["User"].GetId()">
+            <label for="name">Name: </label><input type="text" value="@Model["User"].GetName()" id="name" name="name">
+            <label for="address">Address: </label><input type="text" value="@Model["User"].GetAddress()" id="address" name="address">
+            <label for="phone">Phone: </label><input type="text" value="@Model["User"].GetPhone()" id="phone" name="phone">
+            <label for="email">Email: </label><input type="text" value="@Model["User"].GetEmail()" id="email" name="email">
+            <label for="product">Product: </label><input type="text" value="@Model["Ticket"].GetProduct()" id="product" name="product">
+            @if(Model["Departments"].Count != 0)
+            {
+                <select class="" name="department-id">
+                    @foreach(var department in Model["Departments"])
+                    {
+                        @if(department.GetId() == Model["Ticket"].GetDepartmentId())
+                        {
+                            <option value="@department.GetId()" selected>@department.GetName()</option>
+                        }
+                        else
+                        {
+                            <option value="@department.GetId()">@department.GetName()</option>
+                        }
+                    }
+                </select>
+            }
+            <label for="severity">Severity: </label>
+            <input name="severity" type="text" value="@Model["Ticket"].GetSeverity()" id="severity">
 
-<h3>Ticket#: @Model["Ticket"].GetTicketNumber()</h3>
-<form class="" action="/ticket/@Model["Ticket"].GetId()" method="post">
-    <label for="name">Name: </label><input type="text" value="@Model["User"].GetName()" id="name" name="name">
-    <label for="address">Address: </label><input type="text" value="@Model["User"].GetAddress()" id="address" name="address">
-    <label for="phone">Phone: </label><input type="text" value="@Model["User"].GetPhone()" id="phone" name="phone">
-    <label for="email">Email: </label><input type="text" value="@Model["User"].GetEmail()" id="email" name="email">
-    <label for="product">Product: </label><input type="text" value="@Model["Ticket"].GetProduct()" id="product" name="product">
-    <label for="department">Department: </label><input type="text" value="@Model["Department"].GetName()" id="department" name="department">
-    <label for="severity">Severity: </label><input type="text" value="@Model["Ticket"].GetSeverity()" id="severity">
-    <label for="open-status">Open/Closed:</label>
-    <select name="open-status" id="open-status">
-        @if(Model["Ticket"].GetOpen() == 1)
+            <label for="open-status">Open/Closed:</label>
+            <select name="open-status" id="open-status">
+                @if(Model["Ticket"].GetOpen() == 1)
+                {
+                    <option value="1" selected>Open</option>
+                    <option value="0">Closed</option>
+                }
+                else
+                {
+                    <option value="1">Open</option>
+                    <option value="0" selected>Closed</option>
+                }
+            </select>
+
+            <label for="current-status">Status: </label>
+            <select name="current-status" id="current-status">
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Unresolved">Unresolved</option>
+                <option value="Requires Additional Research">Requires Additional Research</option>
+            </select>
+            <hr>
+            <label for="description">Description: </label><textarea name="description">@Model["Ticket"].GetDescription()</textarea>
+            <button type="submit" name="button">Update</button>
+        </form>
+    </div>
+    <div class="col s6">
+        <a class="btn" href="/ticket/@Model["Ticket"].GetId()/add-note">Add Note</a>
+        <hr>
+
+        @if(Model["Notes"].Count != 0)
+        @foreach(var note in Model["Notes"])
         {
-            <option value="1" selected>Open</option>
-            <option value="0">Closed</option>
+            <p>Admin #: @note.GetAdminId()</p>
+            <p>Note: @note.GetText()</p>
+            <hr>
         }
-        else
-        {
-            <option value="1">Open</option>
-            <option value="0" selected>Closed</option>
-        }
-    </select>
-    <label for="status">Status:</label>
-    <select class="" name="status" id="status">
-        <option>Resolved</option>
-        <option>In Progress</option>
-        <option>Unresolved</option>
-        <option>Requires Additional Research</option>
-    </select>
-    <hr>
-    <label for="description">Description: </label><textarea>@Model["Ticket"].GetDescription()</textarea>
-    <button type="button" name="button">Update</button>
-</form>
+    </div>
+
+</div>

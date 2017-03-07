@@ -103,14 +103,15 @@ namespace Ticketizer
             return foundNote;
         }
 
-        public static List<Note> GetAll()
+        public static List<Note> GetAll(int id)
         {
             List<Note> allNotes = new List<Note>();
 
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM notes ORDER BY date_created;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM notes WHERE ticket_id = @TicketId ORDER BY date_created;", conn);
+            cmd.Parameters.Add(new SqlParameter("@TicketId", id));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 

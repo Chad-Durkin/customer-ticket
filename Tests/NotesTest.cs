@@ -20,7 +20,7 @@ namespace Ticketizer
         [Fact]
         public void Note_EmptyOnLoad()
         {
-            Assert.Equal(0, Note.GetAll().Count);
+            Assert.Equal(0, Note.GetAll(1).Count);
         }
 
         //Equality Test
@@ -40,7 +40,7 @@ namespace Ticketizer
             Note newNote = new Note(date1, 1, 1, "Here is some note text!");
             newNote.Save();
 
-            Assert.Equal(newNote, Note.GetAll()[0]);
+            Assert.Equal(newNote, Note.GetAll(1)[0]);
         }
 
         //Find Test
@@ -62,7 +62,7 @@ namespace Ticketizer
             Note.Delete(newNote.GetId());
 
             List<Note> expected = new List<Note>();
-            List<Note> actual = Note.GetAll();
+            List<Note> actual = Note.GetAll(1);
 
             Assert.Equal(expected, actual);
         }
@@ -80,7 +80,7 @@ namespace Ticketizer
             Assert.Equal("some different text", Note.Find(newNote.GetId()).GetText());
         }
 
-        
+
         public void Dispose()
         {
             Note.DeleteAll();

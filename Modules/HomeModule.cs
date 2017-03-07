@@ -13,8 +13,7 @@ namespace Ticketizer
 
             Get["/"] = _ => {
 
-                CurrentUser thisCurrentUser = new CurrentUser(1, false);
-                if(thisCurrentUser.GetVerify() == true)
+                if(CurrentUser.currentUser.GetVerify())
                 {
                     return View["index.cshtml", ModelMaker()];
                 }
@@ -28,9 +27,11 @@ namespace Ticketizer
             {
                 if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
                 {
-
-                    CurrentUser thisCurrentUser = new CurrentUser(Request.Form["user-name"], Request.Form["password"]);
-                    if(thisCurrentUser.GetVerify() == true)
+                    Admin thisAdmin = Admin.FindByUsername(Request.Form["user-name"]);
+                    CurrentUser.currentUser.SetVerify(true);
+                    CurrentUser.currentUser.SetAdminid(thisAdmin.GetId());
+                    // CurrentUser.currentUser thisCurrentUser.currentUser = new CurrentUser.currentUser(thisAdmin.GetId(), true);
+                    if(CurrentUser.currentUser.GetVerify())
                     {
                         return View["index.cshtml", ModelMaker()];
                     }

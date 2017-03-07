@@ -217,37 +217,37 @@ namespace Ticketizer
 
             return allArticles;
         }
-
-        public static List<Article> SearchMultipleKeyWord(string keywords)
-        {
-            List<Article> allArticles = new List<Article>{};
-
-            string[] keywordsArray = keywords.Split(' ');
-
-
-            SqlConnection conn = DB.Connection();
-            conn.Open();
-
-            SqlCommand cmd = new SqlCommand("SELECT * FROM articles WHERE title LIKE @SearchWord;", conn);
-
-            cmd.Parameters.Add(new SqlParameter("@SearchWord", "%" + keyword + "%"));
-
-            SqlDataReader rdr = cmd.ExecuteReader();
-
-            while(rdr.Read())
-            {
-                int foundId = rdr.GetInt32(0);
-                string foundTitle = rdr.GetString(1);
-                DateTime foundDate = rdr.GetDateTime(2);
-                string foundText = rdr.GetString(3);
-                Article foundArticle = new Article(foundTitle, foundDate, foundText, foundId);
-                allArticles.Add(foundArticle);
-            }
-
-            DB.CloseSqlConnection(conn, rdr);
-
-            return allArticles;
-        }
+        // 
+        // public static List<Article> SearchMultipleKeyWord(string keywords)
+        // {
+        //     List<Article> allArticles = new List<Article>{};
+        //
+        //     string[] keywordsArray = keywords.Split(' ');
+        //
+        //
+        //     SqlConnection conn = DB.Connection();
+        //     conn.Open();
+        //
+        //     SqlCommand cmd = new SqlCommand("SELECT * FROM articles WHERE title LIKE @SearchWord;", conn);
+        //
+        //     cmd.Parameters.Add(new SqlParameter("@SearchWord", "%" + keyword + "%"));
+        //
+        //     SqlDataReader rdr = cmd.ExecuteReader();
+        //
+        //     while(rdr.Read())
+        //     {
+        //         int foundId = rdr.GetInt32(0);
+        //         string foundTitle = rdr.GetString(1);
+        //         DateTime foundDate = rdr.GetDateTime(2);
+        //         string foundText = rdr.GetString(3);
+        //         Article foundArticle = new Article(foundTitle, foundDate, foundText, foundId);
+        //         allArticles.Add(foundArticle);
+        //     }
+        //
+        //     DB.CloseSqlConnection(conn, rdr);
+        //
+        //     return allArticles;
+        // }
 
 
 

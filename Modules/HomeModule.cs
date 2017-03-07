@@ -76,6 +76,19 @@ namespace Ticketizer
                 return View["ticket.cshtml", model];
             };
 
+            Post["/ticket/{id}/add-note"] = parameters => {
+                //REQUIRES ADMIN ID
+                Note newNote = new Note(DateTime.Now, 1, parameters.id, Request.Form["note"]);
+                newNote.Save();
+
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("Ticket", Ticket.Find(parameters.id));
+                model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
+                model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
+                model.Add("Notes", Note.GetAll(parameters.id));
+
+                return View["ticket.cshtml", model];
+            };
         }
 
         // Model Maker

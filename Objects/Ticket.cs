@@ -14,8 +14,10 @@ namespace Ticketizer
         private string _description;
         private string _severity;
         private int _userId;
+        private int _open;
+        private string _status;
 
-        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0)
+        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0, int open = 1, string status = "unresolved")
         {
             _id = id;
             _ticketNumber = ticketNumber;
@@ -24,6 +26,8 @@ namespace Ticketizer
             _userId = userId;
             _description = description;
             _severity = severity;
+            _open = open;
+            _status = status;
         }
 
         public override bool Equals(System.Object otherTicket)
@@ -42,7 +46,9 @@ namespace Ticketizer
                 bool userIdEquality = this.GetUserId() == newTicket.GetUserId();
                 bool severityEquality = this.GetSeverity() == newTicket.GetSeverity();
                 bool descriptionEquality = this.GetDescription() == newTicket.GetDescription();
-                return (idEquality && ticketNumberEquality && productEquality && departmentIdEquality && userIdEquality && severityEquality && descriptionEquality);
+                bool openEquality = this.GetOpen() == newTicket.GetOpen();
+                bool statusEquality = this.GetStatus() == newTicket.GetStatus();
+                return (idEquality && ticketNumberEquality && productEquality && departmentIdEquality && userIdEquality && severityEquality && descriptionEquality && openEquality && statusEquality);
             }
         }
 
@@ -51,7 +57,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, product, department_id, user_Id, severity, description) OUTPUT INSERTED.id VALUES (@ticketNumber, @product, @departmentId, @userId, @severity, @description);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, product, department_id, user_Id, severity, description, open_status, status) OUTPUT INSERTED.id VALUES (@ticketNumber, @product, @departmentId, @userId, @severity, @description, @openTicket, @statusTicket);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@ticketNumber", this.GetTicketNumber()));
             cmd.Parameters.Add(new SqlParameter("@product", this.GetProduct()));
@@ -59,6 +65,8 @@ namespace Ticketizer
             cmd.Parameters.Add(new SqlParameter("@userId", this.GetUserId()));
             cmd.Parameters.Add(new SqlParameter("@severity", this.GetSeverity()));
             cmd.Parameters.Add(new SqlParameter("@description", this.GetDescription()));
+            cmd.Parameters.Add(new SqlParameter("@openTicket", this.GetOpen()));
+            cmd.Parameters.Add(new SqlParameter("@statusTicket", this.GetStatus()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -88,6 +96,8 @@ namespace Ticketizer
             string descriptionTicket = null;
             int userIdTicket = 0;
             string severityTicket = null;
+            int openTicket = 0;
+            string statusTicket = null;
 
             while (rdr.Read())
             {
@@ -98,9 +108,11 @@ namespace Ticketizer
                 severityTicket = rdr.GetString(4);
                 descriptionTicket = rdr.GetString(5);
                 userIdTicket = rdr.GetInt32(6);
+                openTicket = rdr.GetByte(7);
+                statusTicket = rdr.GetString(8);
             }
 
-            Ticket foundTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket);
+            Ticket foundTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, statusTicket);
 
             DB.CloseSqlConnection(conn, rdr);
 
@@ -125,6 +137,8 @@ namespace Ticketizer
             int userIdTicket = 0;
             string descriptionTicket = null;
             string severityTicket = null;
+            int openTicket = 0;
+            string statusTicket = null;
 
             while (rdr.Read())
             {
@@ -135,7 +149,9 @@ namespace Ticketizer
                 severityTicket = rdr.GetString(4);
                 descriptionTicket = rdr.GetString(5);
                 userIdTicket = rdr.GetInt32(6);
-                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket);
+                openTicket = rdr.GetByte(7);
+                statusTicket = rdr.GetString(8);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, statusTicket);
                 allTickets.Add(newTicket);
             }
 
@@ -170,7 +186,6 @@ namespace Ticketizer
             cmd.ExecuteNonQuery();
 
             DB.CloseSqlConnection(conn);
-
         }
 
         public static void UpdateDescription(int ticketId, string newDescription)
@@ -186,7 +201,6 @@ namespace Ticketizer
             cmd.ExecuteNonQuery();
 
             DB.CloseSqlConnection(conn);
-
         }
 
         public static void UpdateDepartmentId(int ticketId, int newDepartmentId)
@@ -202,7 +216,22 @@ namespace Ticketizer
             cmd.ExecuteNonQuery();
 
             DB.CloseSqlConnection(conn);
+        }
 
+        public static void CloseTicket(int ticketId)
+        {
+            int openStatus = 0;
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketOpen", openStatus));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
         }
 
         public void AddAdmin(int id)
@@ -249,6 +278,103 @@ namespace Ticketizer
             return allAdmins;
         }
 
+        public static List<Ticket> GetAllOpen()
+        {
+            List<Ticket> allTickets = new List<Ticket>{};
+
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@OpenStatus", 1));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string productTicket = null;
+            int userIdTicket = 0;
+            string descriptionTicket = null;
+            string severityTicket = null;
+            int openTicket = 0;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+                openTicket = rdr.GetByte(7);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                allTickets.Add(newTicket);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return allTickets;
+        }
+
+        public static List<Ticket> GetAllClosed()
+        {
+            List<Ticket> allTickets = new List<Ticket>{};
+
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@OpenStatus", "0"));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string productTicket = null;
+            int userIdTicket = 0;
+            string descriptionTicket = null;
+            string severityTicket = null;
+            int openTicket = 0;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+                openTicket = rdr.GetByte(7);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                allTickets.Add(newTicket);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return allTickets;
+        }
+
+        public static void UpdateStatus(int ticketId, string newStatus)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET status = @TicketStatus WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketStatus", newStatus));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
         public int GetId()
         {
             return _id;
@@ -257,7 +383,22 @@ namespace Ticketizer
         {
             _id = id;
         }
-
+        public int GetOpen()
+        {
+            return _open;
+        }
+        public string GetStatus()
+        {
+            return _status;
+        }
+        public void SetStatus(string status)
+        {
+            _status = status;
+        }
+        public void SetOpen(int open)
+        {
+            _open = open;
+        }
         public DateTime GetTicketNumber()
         {
             return _ticketNumber;

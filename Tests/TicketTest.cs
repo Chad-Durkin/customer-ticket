@@ -113,6 +113,7 @@ namespace Ticketizer
             //Assert
             Assert.Equal("Laptop", Ticket.Find(newTicket.GetId()).GetDescription());
         }
+
         [Fact]
         public void Test_AddAdminToTicket()
         {
@@ -130,6 +131,75 @@ namespace Ticketizer
 
             //Assert
             Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void UpdateOpenTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.CloseTicket(newTicket.GetId());
+            Ticket foundTicket = Ticket.Find(newTicket.GetId());
+            //Assert
+            Assert.Equal(foundTicket.GetOpen(), 0);
+        }
+
+        [Fact]
+        public void Test_GetAllOpenTickets()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+            DateTime TicketNumber1 = new DateTime(2008, 6, 2, 8, 23, 52);
+            Ticket newTicket1 = new Ticket(TicketNumber1, "Laptop", "Hardware", 3, 1);
+            newTicket1.Save();
+
+            //Act
+            int result = Ticket.GetAllOpen().Count;
+            int expected = 2;
+
+            //Assert
+            Assert.Equal(result, expected);
+        }
+
+        [Fact]
+        public void Test_GetAllClosedTickets()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+            DateTime TicketNumber1 = new DateTime(2008, 6, 2, 8, 23, 52);
+            Ticket newTicket1 = new Ticket(TicketNumber1, "Laptop", "Hardware", 3, 1);
+            newTicket1.Save();
+            Ticket.CloseTicket(newTicket.GetId());
+            Ticket.CloseTicket(newTicket1.GetId());
+            //Act
+            int result = Ticket.GetAllClosed().Count;
+            int expected = 2;
+
+            //Assert
+            Assert.Equal(result, expected);
+        }
+
+        [Fact]
+        public void UpdateTicketStatusTest()
+        {
+            //Arrange
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            //Act
+            Ticket.UpdateStatus(newTicket.GetId(), "Issue resolved");
+
+            //Assert
+            Assert.Equal("Issue resolved", Ticket.Find(newTicket.GetId()).GetStatus());
         }
 
 

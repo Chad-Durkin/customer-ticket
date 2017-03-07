@@ -234,6 +234,22 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn);
         }
 
+        public static void OpenTicket(int ticketId)
+        {
+            int openStatus = 1;
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketOpen", openStatus));
+            cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+
+            cmd.ExecuteNonQuery();
+
+            DB.CloseSqlConnection(conn);
+        }
+
         public void AddAdmin(int id)
         {
             SqlConnection conn = DB.Connection();

@@ -87,6 +87,11 @@ namespace Ticketizer
                 {
                     Ticket.CloseTicket(parameters.id);
                 }
+                
+                if(Request.Form["open-status"] == "1")
+                {
+                    Ticket.OpenTicket(parameters.id);
+                }
 
                 User.Update(Request.Form["user-id"], Request.Form["name"], Request.Form["address"], Request.Form["phone"], Request.Form["email"]);
 

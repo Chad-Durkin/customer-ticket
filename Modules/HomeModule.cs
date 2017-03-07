@@ -9,7 +9,7 @@ namespace Ticketizer
     {
         public HomeModule()
         {
-            //index
+            //login
             Get["/"] = _ => {
                 return View["index.cshtml", ModelMaker()];
             };

@@ -87,7 +87,7 @@ namespace Ticketizer
                 {
                     Ticket.CloseTicket(parameters.id);
                 }
-                
+
                 if(Request.Form["open-status"] == "1")
                 {
                     Ticket.OpenTicket(parameters.id);
@@ -99,7 +99,6 @@ namespace Ticketizer
                 Ticket.UpdateDepartmentId(parameters.id, Request.Form["department-id"]);
                 Ticket.UpdateDescription(parameters.id, Request.Form["description"]);
                 Ticket.UpdateStatus(parameters.id, Request.Form["current-status"]);
-
 
                 Dictionary<string, object> model = ModelMaker();
                 model.Add("Ticket", Ticket.Find(parameters.id));

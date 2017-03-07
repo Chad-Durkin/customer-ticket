@@ -319,6 +319,7 @@ namespace Ticketizer
             string descriptionTicket = null;
             string severityTicket = null;
             int openTicket = 0;
+            string ticketStatus = null;
 
             while (rdr.Read())
             {
@@ -330,7 +331,8 @@ namespace Ticketizer
                 descriptionTicket = rdr.GetString(5);
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
-                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                ticketStatus = rdr.GetString(8);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
                 allTickets.Add(newTicket);
             }
 
@@ -360,6 +362,7 @@ namespace Ticketizer
             string descriptionTicket = null;
             string severityTicket = null;
             int openTicket = 0;
+            string ticketStatus = null;
 
             while (rdr.Read())
             {
@@ -371,7 +374,8 @@ namespace Ticketizer
                 descriptionTicket = rdr.GetString(5);
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
-                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                ticketStatus = rdr.GetString(8);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
                 allTickets.Add(newTicket);
             }
 
@@ -401,6 +405,7 @@ namespace Ticketizer
             string descriptionTicket = null;
             string severityTicket = null;
             int openTicket = 0;
+            string ticketStatus = null;
 
             while (rdr.Read())
             {
@@ -412,7 +417,8 @@ namespace Ticketizer
                 descriptionTicket = rdr.GetString(5);
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
-                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                ticketStatus = rdr.GetString(8);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
                 allTickets.Add(newTicket);
             }
 

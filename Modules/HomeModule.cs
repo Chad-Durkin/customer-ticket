@@ -11,17 +11,17 @@ namespace Ticketizer
         public HomeModule()
         {
             //index
-            Before += async(ctx, ct) =>
-            {
-                if(thisCurrentUser.GetVerify == true)
-                {
-                    return view["index.csthml", thisCurrentUser];
-                }
-                else
-                {
-                    return View["login.cshtml"];
-                }
-            };
+            // Before += async(ctx, ct) =>
+            // {
+            //     if(thisCurrentUser.GetVerify == true)
+            //     {
+            //         return view["index.csthml", thisCurrentUser];
+            //     }
+            //     else
+            //     {
+            //         return View["login.cshtml"];
+            //     }
+            // };
 
             Get["/"] = _ => {
                 return View["index.cshtml", ModelMaker()];
@@ -33,11 +33,11 @@ namespace Ticketizer
 
                 return View["index.cshtml", ModelMaker()];
             };
-            //new ticket form
+            //Tickets
             Get["/new-ticket"] = _ => {
                 return View["new-ticket", ModelMaker()];
             };
-            //new ticket creation
+
             Post["/new-ticket"] = _ => {
                 User newUser = new User(Request.Form["user-name"], Request.Form["user-address"], Request.Form["user-phone"], Request.Form["user-email"]);
                 newUser.Save();
@@ -101,6 +101,26 @@ namespace Ticketizer
                 model.Add("Notes", Note.GetAll(parameters.id));
 
                 return View["ticket.cshtml", model];
+            };
+
+            //Articles
+            Get["/new-article"] = _ => {
+                return View["new-article.cshtml"];
+            };
+
+
+            Post["/new-article"] = _ => {
+                Article newArticle = new Article(Request.Form["title"], DateTime.Now, Request.Form["text"]);
+                newArticle.Save();
+                return View["index.cshtml", ModelMaker()];
+            };
+
+            Get["/ticket/{ticketId}/articles"] = parameters => {
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("TicketId", parameters.id);
+                model.Add("Articles", Articles.GetAll());
+
+                return View["article-list.cshtml", model];
             };
         }
 

@@ -58,10 +58,11 @@
         </form>
     </div>
     <div class="col s6">
+        <a class="btn" href="/ticket/@Model["Ticket"].GetId()/articles">Add Article</a>
         <form action="/ticket/@Model["Ticket"].GetId()/add-note" method="post">
             <label for="note">Add Note: </label>
             <textarea name="note"></textarea>
-            <button type="submit" name="button">Submit</button>
+            <button class="btn" type="submit" name="button">Submit</button>
         </form>
         <hr>
 
@@ -72,6 +73,9 @@
             <p>Note: @note.GetText()</p>
             <hr>
         }
+
+
+
     </div>
 
 </div>

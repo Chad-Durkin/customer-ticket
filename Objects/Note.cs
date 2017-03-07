@@ -48,6 +48,31 @@ namespace Ticketizer
         }
         // end Constructors and Getters
 
+
+        public string GetAdminName()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT admins.name FROM admins JOIN notes ON(admins.id = notes.admin_id) WHERE notes.id = @NoteId;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@NoteId", this.GetId()));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            string foundName = null;
+
+            while(rdr.Read())
+            {
+
+                foundName = rdr.GetString(0);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundName;
+        }
+
         public void Save()
         {
             SqlConnection conn = DB.Connection();

@@ -30,7 +30,6 @@ namespace Ticketizer
                     Admin thisAdmin = Admin.FindByUsername(Request.Form["user-name"]);
                     CurrentUser.currentUser.SetVerify(true);
                     CurrentUser.currentUser.SetAdminid(thisAdmin.GetId());
-                    // CurrentUser.currentUser thisCurrentUser.currentUser = new CurrentUser.currentUser(thisAdmin.GetId(), true);
                     if(CurrentUser.currentUser.GetVerify())
                     {
                         return View["index.cshtml", ModelMaker()];
@@ -108,8 +107,7 @@ namespace Ticketizer
             };
 
             Post["/ticket/{id}/add-note"] = parameters => {
-                //REQUIRES ADMIN ID
-                Note newNote = new Note(DateTime.Now, 1, parameters.id, Request.Form["note"]);
+                Note newNote = new Note(DateTime.Now, CurrentUser.currentUser.GetAdminId(), parameters.id, Request.Form["note"]);
                 newNote.Save();
 
                 Dictionary<string, object> model = ModelMaker();

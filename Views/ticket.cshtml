@@ -77,7 +77,7 @@
         @if(Model["Notes"].Count != 0)
         @foreach(var note in Model["Notes"])
         {
-            <p>Admin #: @note.GetAdminId()</p>
+            <p>Admin: @note.GetAdminName()</p>
             <p>Note: @note.GetText()</p>
             <hr>
         }

@@ -14,45 +14,59 @@
             <label for="product">Product: </label><input type="text" value="@Model["Ticket"].GetProduct()" id="product" name="product">
             @if(Model["Departments"].Count != 0)
             {
-                <select class="" name="department-id">
-                    @foreach(var department in Model["Departments"])
+                <div class="input-field">
+                    <select class="" name="department-id">
+                        @foreach(var department in Model["Departments"])
+                        {
+                            @if(department.GetId() == Model["Ticket"].GetDepartmentId())
+                            {
+                                <option value="@department.GetId()" selected>@department.GetName()</option>
+                            }
+                            else
+                            {
+                                <option value="@department.GetId()">@department.GetName()</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            <div class="input-field">
+                <select class="" name="severity" id="severity">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <label>Severity: </label>
+            </div>
+
+            <div class="input-field">
+                <select name="open-status" id="open-status">
+                    @if(Model["Ticket"].GetOpen() == 1)
                     {
-                        @if(department.GetId() == Model["Ticket"].GetDepartmentId())
-                        {
-                            <option value="@department.GetId()" selected>@department.GetName()</option>
-                        }
-                        else
-                        {
-                            <option value="@department.GetId()">@department.GetName()</option>
-                        }
+                        <option value="1" selected>Open</option>
+                        <option value="0">Closed</option>
+                    }
+                    else
+                    {
+                        <option value="1">Open</option>
+                        <option value="0" selected>Closed</option>
                     }
                 </select>
-            }
-            <label for="severity">Severity: </label>
-            <input name="severity" type="text" value="@Model["Ticket"].GetSeverity()" id="severity">
+                <label>Open/Closed:</label>
+            </div>
 
-            <label for="open-status">Open/Closed:</label>
-            <select name="open-status" id="open-status">
-                @if(Model["Ticket"].GetOpen() == 1)
-                {
-                    <option value="1" selected>Open</option>
-                    <option value="0">Closed</option>
-                }
-                else
-                {
-                    <option value="1">Open</option>
-                    <option value="0" selected>Closed</option>
-                }
-            </select>
+            <div class="input-field">
+                <select name="current-status" id="current-status">
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Unresolved">Unresolved</option>
+                    <option value="Requires Additional Research">Requires Additional Research</option>
+                </select>
+                <label>Status: </label>
+            </div>
 
-            <label for="current-status">Status: </label>
-            <select name="current-status" id="current-status">
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Unresolved">Unresolved</option>
-                <option value="Requires Additional Research">Requires Additional Research</option>
-            </select>
             <hr>
+
             <label for="description">Description: </label><textarea rows="8" name="description">@Model["Ticket"].GetDescription()</textarea>
             <button type="submit" name="button">Update</button>
         </form>

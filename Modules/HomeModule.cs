@@ -29,7 +29,14 @@ namespace Ticketizer
                 User newUser = new User(Request.Form["user-name"], Request.Form["user-address"], Request.Form["user-phone"], Request.Form["user-email"]);
                 newUser.Save();
 
-                Ticket testTicket = new Ticket(DateTime.Now, Request.Form["ticket-product"], Request.Form["ticket-description"], Request.Form["department-id"], newUser.GetId(), Request.Form["severity"]);
+                int deptId;
+
+                if(Request.Form["department-id"] = null)
+                {
+                    deptId = 1;
+                }
+
+                Ticket testTicket = new Ticket(DateTime.Now, Request.Form["ticket-product"], Request.Form["ticket-description"], deptId, newUser.GetId(), Request.Form["severity"]);
                 testTicket.Save();
 
                 return View["index.cshtml", ModelMaker()];

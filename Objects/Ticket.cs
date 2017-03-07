@@ -289,9 +289,9 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus ORDER BY ticket_number;", conn);
 
-            cmd.Parameters.Add(new SqlParameter("@OpenStatus", 1));
+            cmd.Parameters.Add(new SqlParameter("@OpenStatus", "1"));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -330,7 +330,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE open_status = @OpenStatus ORDER BY ticket_number", conn);
 
             cmd.Parameters.Add(new SqlParameter("@OpenStatus", "0"));
 

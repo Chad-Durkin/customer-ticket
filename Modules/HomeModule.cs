@@ -38,6 +38,10 @@ namespace Ticketizer
                 }
                 return View["login.cshtml"];
             };
+
+            Get["/archive"] = _ => {
+                return View["archive.cshtml", Ticket.GetAllClosed()];
+            };
             //add dept
             Post["/add-department"] = _ => {
                 Department newDepartment = new Department(Request.Form["department-name"]);
@@ -80,7 +84,7 @@ namespace Ticketizer
             };
 
             Patch["/ticket/{id}"] = parameters => {
-                if(Request.Form["open-status"] == 0)
+                if(Request.Form["open-status"] == "0")
                 {
                     Ticket.CloseTicket(parameters.id);
                 }
@@ -168,7 +172,7 @@ namespace Ticketizer
             Dictionary<string, object> model = new Dictionary<string, object>{
                 {"Departments", Department.GetAll()},
                 {"Admins", Admin.GetAll()},
-                {"Tickets", Ticket.GetAll()}
+                {"Tickets", Ticket.GetAllOpen()}
             };
 
             return model;

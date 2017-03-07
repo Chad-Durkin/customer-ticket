@@ -175,6 +175,37 @@ namespace Ticketizer
             return verify;
         }
 
+        public static Admin FindByUsername(string username)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM admins WHERE login_name = @Username;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@Username", username));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundId = 0;
+            string foundName = null;
+            string foundUsername = null;
+            string foundPassword = null;
+
+            while(rdr.Read())
+            {
+                foundId = rdr.GetInt32(0);
+                foundName = rdr.GetString(1);
+                foundUsername = rdr.GetString(2);
+                foundPassword = rdr.GetString(3);
+            }
+
+            Admin foundAdmin = new Admin(foundName, foundUsername, foundPassword, foundId);
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundAdmin;
+        }
+
         public static void Delete(int id)
         {
             SqlConnection conn = DB.Connection();

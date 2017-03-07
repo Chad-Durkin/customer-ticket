@@ -23,7 +23,7 @@ namespace Ticketizer
             return _id;
         }
 
-        public static bool GetVerify()
+        public bool GetVerify()
         {
             return _verified;
         }

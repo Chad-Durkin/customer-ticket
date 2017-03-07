@@ -162,6 +162,13 @@ namespace Ticketizer
 
                 return View["ticket.cshtml", model];
             };
+
+            Get["/category/{id}"] = parameters => {
+                Dictionary<string, object> model = new Dictionary<string, object>{};
+                model.Add("CategoryList", Ticket.GetAllByDept(parameters.id));
+                model.Add("Category", Department.Find(parameters.id));
+                return View["categorysearch.cshtml", model];
+            };
         }
 
         // Model Maker

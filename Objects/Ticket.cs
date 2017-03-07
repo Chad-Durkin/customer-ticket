@@ -282,6 +282,47 @@ namespace Ticketizer
             return allAdmins;
         }
 
+        public static List<Ticket> GetAllByDept(int id)
+        {
+            List<Ticket> allTickets = new List<Ticket>{};
+
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT tickets.* FROM tickets JOIN departments ON(tickets.department_id = departments.id) WHERE departments.id = @DeptId", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@DeptId", id));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string productTicket = null;
+            int userIdTicket = 0;
+            string descriptionTicket = null;
+            string severityTicket = null;
+            int openTicket = 0;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+                openTicket = rdr.GetByte(7);
+                Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket);
+                allTickets.Add(newTicket);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return allTickets;
+        }
+
         public static List<Ticket> GetAllOpen()
         {
             List<Ticket> allTickets = new List<Ticket>{};

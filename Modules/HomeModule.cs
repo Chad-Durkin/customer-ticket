@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
+using System.Threading.Tasks;
 
 namespace Ticketizer
 {
@@ -10,6 +11,18 @@ namespace Ticketizer
         public HomeModule()
         {
             //index
+            Before += async(ctx, ct) =>
+            {
+                if(thisCurrentUser.GetVerify == true)
+                {
+                    return view["index.csthml", thisCurrentUser];
+                }
+                else
+                {
+                    return View["login.cshtml"];
+                }
+            }
+
             Get["/"] = _ => {
                 return View["index.cshtml", ModelMaker()];
             };

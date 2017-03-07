@@ -25,8 +25,8 @@ namespace Ticketizer
         [Fact]
         public void Equality_Test()
         {
-            Admin firstAdmin = new Admin("Johnny English");
-            Admin secondAdmin = new Admin("Johnny English");
+            Admin firstAdmin = new Admin("Johnny English", "007", "demo11");
+            Admin secondAdmin = new Admin("Johnny English", "007", "demo11");
 
             Assert.Equal(firstAdmin, secondAdmin);
         }
@@ -35,7 +35,7 @@ namespace Ticketizer
         [Fact]
         public void SaveTest_AdminSave()
         {
-            Admin newAdmin = new Admin("Johnny English");
+            Admin newAdmin = new Admin("Johnny English", "007", "demo11");
             newAdmin.Save();
 
             Assert.Equal(newAdmin, Admin.GetAll()[0]);
@@ -45,7 +45,7 @@ namespace Ticketizer
         [Fact]
         public void FindTest_FindAdmin()
         {
-            Admin newAdmin = new Admin("Johnny English");
+            Admin newAdmin = new Admin("Johnny English", "007", "demo11");
             newAdmin.Save();
 
             Assert.Equal(newAdmin, Admin.Find(newAdmin.GetId()));
@@ -55,7 +55,7 @@ namespace Ticketizer
         [Fact]
         public void DeleteSpecificTest()
         {
-            Admin newAdmin = new Admin("Johnny English");
+            Admin newAdmin = new Admin("Johnny English", "007", "demo11");
             newAdmin.Save();
 
             Admin.Delete(newAdmin.GetId());
@@ -70,7 +70,7 @@ namespace Ticketizer
         [Fact]
         public void UpdateAdminNameTest()
         {
-            Admin newAdmin = new Admin("Johnny English");
+            Admin newAdmin = new Admin("Johnny English", "007", "demo11");
             newAdmin.Save();
 
             Admin.Update(newAdmin.GetId(), "Jenny English");
@@ -79,6 +79,23 @@ namespace Ticketizer
             Assert.Equal("Jenny English", Admin.Find(newAdmin.GetId()).GetName());
         }
 
+        [Fact]
+        public void CheckUsername_CheckLoginEnteredAgainstDatabase()
+        {
+            Admin testAdmin = new Admin("Johnny English", "007", "demo11");
+            testAdmin.Save();
+
+            Assert.Equal(true, Admin.CheckUsername(testAdmin.GetUsername()));
+        }
+
+        [Fact]
+        public void VerifyLogin_CheckPasswordAndUserAgainstDB()
+        {
+            Admin testAdmin = new Admin("Johnny English", "007", "demo11");
+            testAdmin.Save();
+
+            Assert.Equal(true, Admin.VerifyLogin(testAdmin.GetUsername(), testAdmin.GetPassword()));
+        }
 
         public void Dispose()
         {

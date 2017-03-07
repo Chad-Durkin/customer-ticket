@@ -262,13 +262,17 @@ namespace Ticketizer
 
             int adminId = 0;
             string adminName = null;
+            string adminUsername = null;
+            string adminPassword = null;
             List<Admin> allAdmins = new List<Admin>{};
 
             while(rdr.Read())
             {
                 adminId = rdr.GetInt32(0);
                 adminName = rdr.GetString(1);
-                Admin foundAdmin = new Admin(adminName, adminId);
+                adminUsername = rdr.GetString(2);
+                adminPassword = rdr.GetString(3);
+                Admin foundAdmin = new Admin(adminName, adminUsername, adminPassword, adminId);
                 allAdmins.Add(foundAdmin);
             }
 

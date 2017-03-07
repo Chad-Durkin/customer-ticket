@@ -122,7 +122,7 @@ namespace Ticketizer
             Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
             newTicket.Save();
 
-            Admin newAdmin = new Admin("Johnny English");
+            Admin newAdmin = new Admin("Johnny English", "007", "demo11");
             newAdmin.Save();
 
             //Act

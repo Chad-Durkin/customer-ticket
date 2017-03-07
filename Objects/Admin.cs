@@ -9,11 +9,15 @@ namespace Ticketizer
     {
         private int _id;
         private string _name;
+        private string _login_name;
+        private string _password;
 
-        public Admin(string name, int id = 0)
+        public Admin(string name, string username, string password, int id = 0)
         {
             _id = id;
             _name = name;
+            _login_name = username;
+            _password = password;
         }
 
         public string GetName()
@@ -26,14 +30,26 @@ namespace Ticketizer
             return _id;
         }
 
+        public string GetPassword()
+        {
+            return _password;
+        }
+
+        public string GetUsername()
+        {
+            return _login_name;
+        }
+
         public void Save()
         {
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO admins (name) OUTPUT INSERTED.id VALUES (@AdminName);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO admins (name, login_name, password) OUTPUT INSERTED.id VALUES (@AdminName, @UserName, @Password);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@AdminName", this.GetName()));
+            cmd.Parameters.Add(new SqlParameter("@UserName", this.GetUsername()));
+            cmd.Parameters.Add(new SqlParameter("@Password", this.GetPassword()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -58,14 +74,18 @@ namespace Ticketizer
 
             int foundId = 0;
             string foundName = null;
+            string foundUsername = null;
+            string foundPassword = null;
 
             while(rdr.Read())
             {
                 foundId = rdr.GetInt32(0);
                 foundName = rdr.GetString(1);
+                foundUsername = rdr.GetString(2);
+                foundPassword = rdr.GetString(3);
             }
 
-            Admin foundAdmin = new Admin(foundName, foundId);
+            Admin foundAdmin = new Admin(foundName, foundUsername, foundPassword, foundId);
 
             DB.CloseSqlConnection(conn, rdr);
 
@@ -87,7 +107,9 @@ namespace Ticketizer
             {
                 int foundId = rdr.GetInt32(0);
                 string foundName = rdr.GetString(1);
-                Admin foundAdmin = new Admin(foundName, foundId);
+                string foundUsername = rdr.GetString(2);
+                string foundPassword = rdr.GetString(3);
+                Admin foundAdmin = new Admin(foundName, foundUsername, foundPassword, foundId);
                 allAdmins.Add(foundAdmin);
             }
 
@@ -110,6 +132,47 @@ namespace Ticketizer
 
             DB.CloseSqlConnection(conn);
 
+        }
+
+        public static bool CheckUsername(string username)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            bool verify = false;
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM admins WHERE login_name = @UserName;", conn);
+            cmd.Parameters.Add(new SqlParameter("@UserName", username));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+            {
+                verify = true;
+            }
+
+            return verify;
+        }
+
+        public static bool VerifyLogin(string username, string pw)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            bool verify = false;
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM admins WHERE login_name = @Username AND password = @Password;", conn);
+            cmd.Parameters.Add( new SqlParameter("@Username", username));
+            cmd.Parameters.Add(new SqlParameter("@Password", pw));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while(rdr.Read())
+            {
+                verify = true;
+            }
+
+            return verify;
         }
 
         public static void Delete(int id)

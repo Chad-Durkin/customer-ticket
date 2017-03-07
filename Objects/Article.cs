@@ -190,47 +190,70 @@ namespace Ticketizer
             return allArticles;
         }
 
-        public static List<Article> SearchKeyWord(string keyword)
+        public static List<Article> Search(string keyword)
         {
             List<Article> allArticles = new List<Article>{};
 
-            SqlConnection conn = DB.Connection();
-            conn.Open();
-
-            SqlCommand cmd = new SqlCommand("SELECT * FROM articles WHERE title LIKE @SearchWord;", conn);
-
-            cmd.Parameters.Add(new SqlParameter("@SearchWord", "%" + keyword + "%"));
-
-            SqlDataReader rdr = cmd.ExecuteReader();
-
-            while(rdr.Read())
+            string[] keywordsArray = keyword.Split(' ');
+            if(keywordsArray.Length > 1)
             {
-                int foundId = rdr.GetInt32(0);
-                string foundTitle = rdr.GetString(1);
-                DateTime foundDate = rdr.GetDateTime(2);
-                string foundText = rdr.GetString(3);
-                Article foundArticle = new Article(foundTitle, foundDate, foundText, foundId);
-                allArticles.Add(foundArticle);
-            }
+                string searchTheseWords = string.Join("%' AND title LIKE '%", keywordsArray);
+                string finalSearchString = "SELECT * FROM articles WHERE title LIKE '%" + searchTheseWords + "%'";
 
-            DB.CloseSqlConnection(conn, rdr);
+                SqlConnection conn = DB.Connection();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand(finalSearchString, conn);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while(rdr.Read())
+                {
+                    int foundId = rdr.GetInt32(0);
+                    string foundTitle = rdr.GetString(1);
+                    DateTime foundDate = rdr.GetDateTime(2);
+                    string foundText = rdr.GetString(3);
+                    Article foundArticle = new Article(foundTitle, foundDate, foundText, foundId);
+                    allArticles.Add(foundArticle);
+                }
+
+                DB.CloseSqlConnection(conn, rdr);
+            }
+            else{
+                SqlConnection conn = DB.Connection();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT * FROM articles WHERE title LIKE @SearchWord;", conn);
+
+                cmd.Parameters.Add(new SqlParameter("@SearchWord", "%" + keyword + "%"));
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while(rdr.Read())
+                {
+                    int foundId = rdr.GetInt32(0);
+                    string foundTitle = rdr.GetString(1);
+                    DateTime foundDate = rdr.GetDateTime(2);
+                    string foundText = rdr.GetString(3);
+                    Article foundArticle = new Article(foundTitle, foundDate, foundText, foundId);
+                    allArticles.Add(foundArticle);
+                }
+
+                DB.CloseSqlConnection(conn, rdr);
+            }
 
             return allArticles;
         }
-        // 
+        //
         // public static List<Article> SearchMultipleKeyWord(string keywords)
         // {
         //     List<Article> allArticles = new List<Article>{};
         //
         //     string[] keywordsArray = keywords.Split(' ');
-        //
+        //     string searchTheseWords = string.Join("%' AND title LIKE '%", keywordsArray);
+        //     string finalSearchString = "SELECT * FROM articles WHERE title LIKE '%" + searchTheseWords + "%'";
+        //     Console.WriteLine(finalSearchString);
         //
         //     SqlConnection conn = DB.Connection();
         //     conn.Open();
         //
-        //     SqlCommand cmd = new SqlCommand("SELECT * FROM articles WHERE title LIKE @SearchWord;", conn);
-        //
-        //     cmd.Parameters.Add(new SqlParameter("@SearchWord", "%" + keyword + "%"));
+        //     SqlCommand cmd = new SqlCommand(finalSearchString, conn);
         //
         //     SqlDataReader rdr = cmd.ExecuteReader();
         //

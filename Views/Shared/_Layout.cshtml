@@ -10,18 +10,21 @@
         <title>Ticketizer</title>
     </head>
     <body>
-        <div class="row">
-            <a href="/new-ticket">New Ticket</a>
-        </div>
-        <div class="row">
+        <div class="container">
+            <h1><a href="/">Ticketizer</h1>
+            <div class="row">
+                <a href="/new-ticket">New Ticket</a>
+            </div>
+            <div class="row">
 
-        </div>
-        @RenderBody()
-        <div class="row">
-            <form class="" action="/add-department" method="post">
-                <input type="text" name="department-name" placeholder="Add Department">
-                <button type="submit" name="button">Add department</button>
-            </form>
+            </div>
+            @RenderBody()
+            <div class="row">
+                <form class="" action="/add-department" method="post">
+                    <input type="text" name="department-name" placeholder="Add Department" required>
+                    <button type="submit" name="button">Add department</button>
+                </form>
+            </div>
         </div>
     </body>
 </html>

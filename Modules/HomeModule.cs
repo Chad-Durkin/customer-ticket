@@ -12,32 +12,32 @@ namespace Ticketizer
         {
 
             Get["/"] = _ => {
-                if(CurrentUser.GetVerify() == true)
-                {
+                // if(CurrentUser.GetVerify() == true)
+                // {
                     return View["index.cshtml", ModelMaker()];
-                }
-                else
-                {
-                    return View["login.cshtml"];
-                }
+                // }
+                // else
+                // {
+                //     return View["login.cshtml"];
+                // }
             };
 
-            Post["/login"] = _ =>
-            {
-                if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
-                {
-
-                    CurrentUser thisCurrentUser = new CurrentUser()
-                }
-                if(CurrentUser.GetVerify() == true)
-                {
-                    return View["index.cshtml", ModelMaker()];
-                }
-                else
-                {
-                    return View["login.cshtml"];
-                }
-            };
+            // Post["/login"] = _ =>
+            // {
+            //     if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
+            //     {
+            //
+            //         CurrentUser thisCurrentUser = new CurrentUser();
+            //     }
+            //     if(CurrentUser.GetVerify() == true)
+            //     {
+            //         return View["index.cshtml", ModelMaker()];
+            //     }
+            //     else
+            //     {
+            //         return View["login.cshtml"];
+            //     }
+            // };
             //add dept
             Post["/add-department"] = _ => {
                 Department newDepartment = new Department(Request.Form["department-name"]);
@@ -73,6 +73,7 @@ namespace Ticketizer
                 model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
                 model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
                 model.Add("Notes", Note.GetAll(parameters.id));
+                model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
 
                 return View["ticket.cshtml", model];
 
@@ -97,6 +98,7 @@ namespace Ticketizer
                 model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
                 model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
                 model.Add("Notes", Note.GetAll(parameters.id));
+                model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
 
                 return View["ticket.cshtml", model];
             };
@@ -111,6 +113,7 @@ namespace Ticketizer
                 model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
                 model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
                 model.Add("Notes", Note.GetAll(parameters.id));
+                model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
 
                 return View["ticket.cshtml", model];
             };
@@ -139,9 +142,23 @@ namespace Ticketizer
 
                 Dictionary<string, object> model = ModelMaker();
                 model.Add("TicketId", parameters.id);
-                model.Add("Articles", Article.GetAll());
+                model.Add("Article", Article.Find(parameters.articleId));
 
                 return View["article.cshtml", model];
+            };
+
+            Post["/ticket/{id}/articles/{articleId}"] = parameters => {
+
+                Article.Find(parameters.articleId).ArticleToTicket(parameters.id);
+
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("Ticket", Ticket.Find(parameters.id));
+                model.Add("User", User.Find(Ticket.Find(parameters.id).GetUserId()));
+                model.Add("Department", Department.Find(Ticket.Find(parameters.id).GetDepartmentId()));
+                model.Add("Notes", Note.GetAll(parameters.id));
+                model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
+
+                return View["ticket.cshtml", model];
             };
         }
 

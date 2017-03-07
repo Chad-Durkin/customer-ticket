@@ -59,6 +59,14 @@
     </div>
     <div class="col s6">
         <a class="btn" href="/ticket/@Model["Ticket"].GetId()/articles">Add Article</a>
+        @if(Model["ArticlesAttached"].Count != 0)
+        {
+            @foreach(var article in Model["ArticlesAttached"])
+            {
+                <a href="/ticket/@Model["Ticket"].GetId()/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
+            }
+        }
+
         <form action="/ticket/@Model["Ticket"].GetId()/add-note" method="post">
             <label for="note">Add Note: </label>
             <textarea name="note"></textarea>

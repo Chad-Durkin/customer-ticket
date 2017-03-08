@@ -16,7 +16,7 @@ namespace Ticketizer
         [Fact]
         public void TEST_CreateOneArticle()
         {
-            Assert.Equal(8, KAGenerator.GenerateArticle().Count);
+            Assert.Equal(20, KAGenerator.GenerateArticle().Count);
         }
     }
 }

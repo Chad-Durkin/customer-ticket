@@ -1,7 +1,44 @@
+body {
+    color: #3d3d3d;
+}
+
 .login-div {
     height: 100vh;
 }
 
 .ticketizer-logo, .login-form {
     display: none;
+}
+
+.ticketizer-logo {
+    font-family: 'Megrim', cursive;
+    font-weight: bold;
+}
+
+.btn {
+    background-color: #44648c;
+    color: white !important;
+}
+
+.btn:hover {
+    background-color: #44648c;
+    color: white !important;
+}
+
+a {
+    color: #44648c !important;
+}
+
+a:hover {
+    color: #374960 !important;
+}
+
+.layout-logo {
+    margin: 10% 0 4% -8%;
+    font-family: 'Megrim', cursive;
+    font-weight: bold;
+}
+
+i {
+    margin-left: 5%;
 }

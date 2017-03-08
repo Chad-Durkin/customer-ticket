@@ -69,6 +69,39 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn, rdr);
         }
 
+        public static User FindByName(string name)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM users WHERE name = @UserName;", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@UserName", name));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int foundId = 0;
+            string foundName = null;
+            string foundAddress = null;
+            string foundPhone = null;
+            string foundEmail = null;
+
+            while(rdr.Read())
+            {
+                foundId = rdr.GetInt32(0);
+                foundName = rdr.GetString(1);
+                foundAddress = rdr.GetString(2);
+                foundPhone = rdr.GetString(3);
+                foundEmail = rdr.GetString(4);
+            }
+
+            User foundUser = new User(foundName, foundAddress, foundPhone, foundEmail, foundId);
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundUser;
+        }
+
         public static User Find(int id)
         {
             SqlConnection conn = DB.Connection();

@@ -10,7 +10,7 @@ namespace Ticketizer
     {
         public HomeModule()
         {
-
+            //Home
             Get["/"] = _ => {
 
                 if(CurrentUser.currentUser.GetVerify())
@@ -22,7 +22,7 @@ namespace Ticketizer
                     return View["login.cshtml"];
                 }
             };
-
+            //Login
             Post["/login"] = _ =>
             {
                 if(Admin.VerifyLogin(Request.Form["user-name"], Request.Form["password"]))
@@ -37,11 +37,11 @@ namespace Ticketizer
                 }
                 return View["login.cshtml"];
             };
-
+            //Archive
             Get["/archive"] = _ => {
                 return View["archive.cshtml", Ticket.GetAllClosed()];
             };
-            //add dept
+            //Add dept
             Post["/add-department"] = _ => {
                 Department newDepartment = new Department(Request.Form["department-name"]);
                 newDepartment.Save();
@@ -52,7 +52,7 @@ namespace Ticketizer
             Get["/new-ticket"] = _ => {
                 return View["new-ticket", ModelMaker()];
             };
-
+            //Create Ticket
             Post["/new-ticket"] = _ => {
                 User newUser = new User(Request.Form["user-name"], Request.Form["user-address"], Request.Form["user-phone"], Request.Form["user-email"]);
                 newUser.Save();
@@ -69,7 +69,33 @@ namespace Ticketizer
 
                 return View["index.cshtml", ModelMaker()];
             };
+            //Find User
+            Post["/find-user"] = _ => {
+                User foundUser = User.FindByName(Request.Form["find-user"]);
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("User", foundUser);
+                return View["new-ticket-found-user.cshtml", model];
+            };
 
+            //New Ticket with user info populated
+            Post["/new-ticket-user"] = _ => {
+                User.Update(Request.Form["user-id"], Request.Form["name"], Request.Form["address"], Request.Form["phone"], Request.Form["email"]);
+
+                User newUser = User.Find(Request.Form["user-id"]);
+
+                int deptId = 0;
+
+                if(Request.Form["department-id"] != null)
+                {
+                    deptId = Request.Form["department-id"];
+                }
+
+                Ticket testTicket = new Ticket(DateTime.Now, Request.Form["ticket-product"], Request.Form["ticket-description"], deptId, newUser.GetId(), Request.Form["severity"]);
+                testTicket.Save();
+
+                return View["index.cshtml", ModelMaker()];
+            };
+            //Opened Ticket
             Get["/ticket/{id}"] = parameters => {
                 Dictionary<string, object> model = ModelMaker();
                 model.Add("Ticket", Ticket.Find(parameters.id));
@@ -81,7 +107,7 @@ namespace Ticketizer
                 return View["ticket.cshtml", model];
 
             };
-
+            //Edit Ticket
             Patch["/ticket/{id}"] = parameters => {
                 if(Request.Form["open-status"] == "0")
                 {
@@ -109,7 +135,7 @@ namespace Ticketizer
 
                 return View["ticket.cshtml", model];
             };
-
+            //Add Note
             Post["/ticket/{id}/add-note"] = parameters => {
                 Note newNote = new Note(DateTime.Now, CurrentUser.currentUser.GetAdminId(), parameters.id, Request.Form["note"]);
                 newNote.Save();
@@ -128,24 +154,24 @@ namespace Ticketizer
             Get["/new-article"] = _ => {
                 return View["new-article.cshtml"];
             };
-
+            //Full list for browsing
             Get["/full-article-list"] = _ => {
                 Dictionary<string, object> model = new Dictionary<string, object>{{"Articles", Article.GetAll()}};
                 return View["full-article-list.cshtml", model];
             };
-
+            //Specific article
             Get["/articles/{id}"] = parameters => {
                 Article model = Article.Find(parameters.id);
 
                 return View["browse-article.cshtml", model];
             };
-
+            //Create article
             Post["/new-article"] = _ => {
                 Article newArticle = new Article(Request.Form["title"], DateTime.Now, Request.Form["text"]);
                 newArticle.Save();
                 return View["index.cshtml", ModelMaker()];
             };
-
+            //View articles and be associated with a ticket
             Get["/ticket/{id}/articles"] = parameters => {
                 Dictionary<string, object> model = ModelMaker();
                 model.Add("TicketId", parameters.id);
@@ -153,7 +179,7 @@ namespace Ticketizer
 
                 return View["article-list.cshtml", model];
             };
-
+            //View specific article and be associated with a ticket
             Get["/ticket/{id}/articles/{articleId}"] = parameters => {
 
                 Dictionary<string, object> model = ModelMaker();
@@ -162,7 +188,7 @@ namespace Ticketizer
 
                 return View["article.cshtml", model];
             };
-
+            //Assign article to ticket
             Post["/ticket/{id}/articles/{articleId}"] = parameters => {
 
                 Article.Find(parameters.articleId).ArticleToTicket(parameters.id);
@@ -176,7 +202,7 @@ namespace Ticketizer
 
                 return View["ticket.cshtml", model];
             };
-
+            //Get by department category
             Get["/category/{id}"] = parameters => {
                 Dictionary<string, object> model = new Dictionary<string, object>{};
                 model.Add("CategoryList", Ticket.GetAllByDept(parameters.id));

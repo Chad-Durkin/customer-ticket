@@ -2,21 +2,17 @@
     Layout="Shared/_Layout.cshtml";
 }
 
-<form class="" action="/find-user" method="post">
-    <input type="text" name="find-user" placeholder="Find user by name">
-    <button type="submit" name="button">Search</button>
-</form>
-<hr>
 <h3>New Ticket</h3>
-<form class="" action="/new-ticket" method="post">
+<form class="" action="/new-ticket-user" method="post">
     <label for="user-name">Name:</label>
-    <input type="text" name="user-name">
+    <input type="text" name="user-name" value="@Model["User"].GetName()">
     <label for="user-address">Address:</label>
-    <input type="text" name="user-address">
+    <input type="text" name="user-address" value="@Model["User"].GetAddress()">
     <label for="user-phone">Phone:</label>
-    <input type="text" name="user-phone">
+    <input type="text" name="user-phone" value="@Model["User"].GetPhone()">
     <label for="user-email">Email:</label>
-    <input type="text" name="user-email">
+    <input type="text" name="user-email" value="@Model["User"].GetEmail()">
+    <input type="hidden" name="user-id" value="@Model["User"].GetId()">
     <hr>
     <label for="ticket-product">Product:</label>
     <input type="text" name="ticket-product">

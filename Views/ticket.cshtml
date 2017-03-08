@@ -84,13 +84,14 @@
             <hr>
 
             <label for="description">Description: </label><textarea rows="8" name="description">@Model["Ticket"].GetDescription()</textarea>
-            <button type="submit" name="button">Update</button>
+            <button class="btn" type="submit" name="button">Update</button>
         </form>
     </div>
     <div class="col s6">
         <a class="btn" href="/ticket/@Model["Ticket"].GetId()/articles">Find Article</a>
         @if(Model["ArticlesAttached"].Count != 0)
         {
+            <h5>Articles Attached:</h5>
             @foreach(var article in Model["ArticlesAttached"])
             {
                 <a href="/ticket/@Model["Ticket"].GetId()/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
@@ -102,19 +103,17 @@
             <textarea name="note"></textarea>
             <button class="btn" type="submit" name="button">Submit</button>
         </form>
-        <hr>
 
         @if(Model["Notes"].Count != 0)
-        @foreach(var note in Model["Notes"])
         {
-            <p>Admin: @note.GetAdminName()</p>
-            <p>Note: @note.GetText()</p>
-            <p>Date: @note.GetDate()</p>
-            <hr>
+            <h5>Notes Attached:</h5>
+            @foreach(var note in Model["Notes"])
+            {
+                <p>Admin: @note.GetAdminName()</p>
+                <p>Note: @note.GetText()</p>
+                <p>Date: @note.GetDate()</p>
+                <hr>
+            }
         }
-
-
-
     </div>
-
 </div>

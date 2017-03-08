@@ -8,7 +8,7 @@
     @foreach(var ticket in Model)
     {
         <a href="/ticket/@ticket.GetId()">
-            <div class="ticket">
+            <div class="ticket hoverable">
                 <p>Ticket Number: @ticket.GetConvertedTicketNum() </p>
                 <p>Status: @ticket.GetStatus()</p>
             </div>

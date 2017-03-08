@@ -497,6 +497,49 @@ namespace Ticketizer
             DB.CloseSqlConnection(conn);
         }
 
+        //Analytics
+
+        public static int GetNumberClosed()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(id) FROM tickets WHERE open_status = 0;", conn);
+
+            SqlDataReader rdr =cmd.ExecuteReader();
+
+            int numberClosed = 0;
+            while(rdr.Read())
+            {
+                numberClosed = rdr.GetInt32(0);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return numberClosed;
+        }
+
+        public static int GetNumberOpen()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(id) FROM tickets WHERE open_status = 1;", conn);
+
+            SqlDataReader rdr =cmd.ExecuteReader();
+
+            int numberOpen = 0;
+            while(rdr.Read())
+            {
+                numberOpen = rdr.GetInt32(0);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return numberOpen;
+        }
+
+        //Getters/Setters
         public int GetId()
         {
             return _id;

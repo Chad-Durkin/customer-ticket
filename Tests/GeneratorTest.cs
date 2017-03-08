@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Ticketizer
 {
-    public class GenerateTest
+    public class GenerateTest : IDisposable
     {
         public GenerateTest()
         {
@@ -17,6 +17,11 @@ namespace Ticketizer
         public void TEST_CreateOneArticle()
         {
             Assert.Equal(20, KAGenerator.GenerateArticle().Count);
+        }
+
+        public void Dispose()
+        {
+            Article.DeleteAll();
         }
     }
 }

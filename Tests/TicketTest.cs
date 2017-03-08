@@ -214,6 +214,19 @@ namespace Ticketizer
             Assert.Equal(newTicket, foundTicket);
         }
 
+        [Fact]
+        public void FindNumTicketClose()
+        {
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+            Ticket otherTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            otherTicket.Save();
+            Ticket.CloseTicket(newTicket.GetId());
+
+            Assert.Equal(1, Ticket.GetNumberClosed());
+        }
+
 
         public void Dispose()
         {

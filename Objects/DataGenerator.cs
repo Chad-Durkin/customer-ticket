@@ -19,7 +19,6 @@ namespace Ticketizer
                 tempArticle.Save();
                 fakeNews.Add(tempArticle);
             }
-            Console.WriteLine(titleList.Count);
 
             return fakeNews;
         }

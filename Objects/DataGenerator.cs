@@ -16,7 +16,7 @@ namespace Ticketizer
                 DateTime date = DateTime.Parse(dateList[i]);
                 string content = texts[i];
                 Article tempArticle = new Article(title, date, content);
-                // tempArticle.Save();
+                tempArticle.Save();
                 fakeNews.Add(tempArticle);
             }
             Console.WriteLine(titleList.Count);

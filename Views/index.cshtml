@@ -4,8 +4,8 @@
 
 <div class="row">
     <div class="col s3">
-        <p>Departments</p>
-        <hr>
+        <h5>Departments</h5>
+
         @if(Model["Departments"].Count != 0)
         {
             foreach(var department in Model["Departments"])
@@ -20,11 +20,7 @@
         <p><a href="/archive">Archive</a></p>
     </div>
     <div class="col s9">
-        <form class="" action="/find-ticket" method="get">
-            <input type="text" name="ticket-number" placeholder="Ticket #">
-            <button type="submit" name="button">Find</button>
-        </form>
-        <p>Tickets</p>
+        <h5>Tickets</h5>
         @if(Model["Tickets"].Count != 0)
         {
             foreach(var ticket in Model["Tickets"])
@@ -48,6 +44,6 @@
 <div class="row">
     <form class="" action="/add-department" method="post">
         <input type="text" name="department-name" placeholder="Add Department" required>
-        <button type="submit" name="button">Add department</button>
+        <button class="btn" type="submit" name="button">Add department</button>
     </form>
 </div>

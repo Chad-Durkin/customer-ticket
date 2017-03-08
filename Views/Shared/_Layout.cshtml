@@ -12,14 +12,15 @@
     <body>
         <div class="container">
             <h1><a href="/">Ticketizer</h1>
-            <div class="row">
-                <a href="/new-ticket">New Ticket</a><br>
-                <a href="/new-article">New Article</a><br>
-                <a href="/full-article-list">Browse Articles</a><br>
-            </div>
-            <div class="row">
-
-            </div>
+                <div class="row">
+                    <a href="/new-ticket">New Ticket</a><br>
+                    <a href="/new-article">New Article</a><br>
+                    <a href="/full-article-list">Browse Articles</a><br>
+                    <form class="" action="/find-ticket" method="get">
+                        <input type="text" name="ticket-number" placeholder="Ticket #">
+                        <button class="btn" type="submit" name="button">Find</button>
+                    </form>
+                </div>
             @RenderBody()
         </div>
     </body>

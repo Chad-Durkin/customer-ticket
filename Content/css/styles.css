@@ -1,0 +1,7 @@
+.login-div {
+    height: 100vh;
+}
+
+.ticketizer-logo, .login-form {
+    display: none;
+}

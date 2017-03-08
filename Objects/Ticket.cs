@@ -539,6 +539,29 @@ namespace Ticketizer
             return numberOpen;
         }
 
+        public static bool CheckCloseInWeek(DateTime closeDate)
+        {
+            var currentDay = DateTime.Today;
+            string DOW = currentDay.dateValue.ToString("ddd");
+            int increment = 1;
+
+            while(DOW != "Sun")
+            {
+                currentDay.AddDays(-increment);
+                string DOW = currentDay.ToString("ddd");
+                increment ++;
+            }
+
+            var firstDay = currentDay;
+            var lastDay = firstDay.AddDays(6);
+
+            if(closeDate >= firstDay && closeDate <= lastDay)
+            {
+                return true;
+            }
+            return false;
+        }
+
         //Getters/Setters
         public int GetId()
         {

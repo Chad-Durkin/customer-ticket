@@ -20,6 +20,10 @@
         <p><a href="/archive">Archive</a></p>
     </div>
     <div class="col s9">
+        <form class="" action="/find-ticket" method="get">
+            <input type="text" name="ticket-number" placeholder="Ticket #">
+            <button type="submit" name="button">Find</button>
+        </form>
         <p>Tickets</p>
         @if(Model["Tickets"].Count != 0)
         {

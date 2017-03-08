@@ -104,8 +104,27 @@ namespace Ticketizer
                 model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
 
                 return View["ticket.cshtml", model];
-
             };
+            //Search Ticket
+            Get["/find-ticket"] = _ => {
+                Ticket foundTicket = Ticket.FindByTicketNumber(Request.Query["ticket-number"]);
+                if(foundTicket.GetUserId() == 0)
+                {
+                    return View["new-ticket", ModelMaker()];
+                }
+                else
+                {
+                    Dictionary<string, object> model = ModelMaker();
+                    model.Add("Ticket", foundTicket);
+                    model.Add("User", User.Find(foundTicket.GetUserId()));
+                    model.Add("Department", Department.Find(foundTicket.GetDepartmentId()));
+                    model.Add("Notes", Note.GetAll(foundTicket.GetId()));
+                    model.Add("ArticlesAttached", Article.GetAllAttached(foundTicket.GetId()));
+
+                    return View["ticket.cshtml", model];
+                }
+            };
+
             //Edit Ticket
             Patch["/ticket/{id}"] = parameters => {
                 if(Request.Form["open-status"] == "0")

@@ -202,6 +202,18 @@ namespace Ticketizer
             Assert.Equal("Issue resolved", Ticket.Find(newTicket.GetId()).GetStatus());
         }
 
+        [Fact]
+        public void FindTicketByConvertedTicketNumber()
+        {
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+
+            Ticket foundTicket = Ticket.FindByTicketNumber(newTicket.GetConvertedTicketNum());
+
+            Assert.Equal(newTicket, foundTicket);
+        }
+
 
         public void Dispose()
         {

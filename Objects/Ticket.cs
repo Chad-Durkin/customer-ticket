@@ -140,6 +140,50 @@ namespace Ticketizer
             return foundTicket;
         }
 
+        public static Ticket FindByTicketNumber(string ticketNum)
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE converted_ticket_number = @TicketNum", conn);
+
+            cmd.Parameters.Add(new SqlParameter("@TicketNum", ticketNum));
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            int idTicket = 0;
+            DateTime ticketNumberTicket = new DateTime();
+            int departmentIdTicket = 0;
+            string productTicket = null;
+            string descriptionTicket = null;
+            int userIdTicket = 0;
+            string severityTicket = null;
+            int openTicket = 0;
+            string statusTicket = null;
+            string convTicketNum = null;
+
+            while (rdr.Read())
+            {
+                idTicket = rdr.GetInt32(0);
+                ticketNumberTicket = rdr.GetDateTime(1);
+                productTicket = rdr.GetString(2);
+                departmentIdTicket = rdr.GetInt32(3);
+                severityTicket = rdr.GetString(4);
+                descriptionTicket = rdr.GetString(5);
+                userIdTicket = rdr.GetInt32(6);
+                openTicket = rdr.GetByte(7);
+                statusTicket = rdr.GetString(8);
+                convTicketNum = rdr.GetString(9);
+            }
+
+            Ticket foundTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, statusTicket);
+            foundTicket.SetConvertedTicketNum(convTicketNum);
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return foundTicket;
+        }
+
         public static List<Ticket> GetAll()
         {
             List<Ticket> allTickets = new List<Ticket>{};

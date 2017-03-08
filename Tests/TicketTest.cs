@@ -227,6 +227,12 @@ namespace Ticketizer
             Assert.Equal(1, Ticket.GetNumberClosed());
         }
 
+        // [Fact]
+        // {
+        //     Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+        //     newTicket.Save();
+        // }
+
 
         public void Dispose()
         {

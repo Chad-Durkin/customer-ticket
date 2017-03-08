@@ -19,12 +19,20 @@
                     <a href="/new-ticket"><i class="medium material-icons">turned_in_not</i>New Ticket</a>
                     <a href="/new-article"><i class="medium material-icons">library_add</i>New Article</a>
                     <a href="/full-article-list"><i class="medium material-icons">library_books</i>Browse Articles</a>
-                    <form class="" action="/find-ticket" method="get">
-                        <input type="text" name="ticket-number" placeholder="Ticket #">
-                        <button class="btn" type="submit" name="button">Find</button>
-                    </form>
+                    <div class="row search-form">
+                        <form class="" action="/find-ticket" method="get">
+                            <input type="text" name="ticket-number" placeholder="Search by Ticket #">
+                            <button class="btn" type="submit" name="button">Find</button>
+                        </form>
+                    </div>
                 </div>
             @RenderBody()
         </div>
     </body>
+    <footer>
+
+    </footer>
+    <div class="container">
+            <p class="right"><em>Ticketizer</em> is a group project by Chad T. Durkin, Lawrence Eby, Melvin F. Gruschow, and Grinil Khanna made at the Epicodus code school in Seattle.</em></p>
+    </div>
 </html>

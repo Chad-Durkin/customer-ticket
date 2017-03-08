@@ -1,5 +1,6 @@
-body {
+body, footer {
     color: #3d3d3d;
+    padding-bottom: 10%;
 }
 
 .login-div {
@@ -41,4 +42,23 @@ a:hover {
 
 i {
     margin-left: 5%;
+}
+
+footer {
+    margin-top: 5%;
+    text-align: right;
+}
+
+.ticket {
+    padding: 1% 1% 1% 3%;
+    border-radius: 3px;
+}
+
+.ticket:hover{
+    border-left-style: inset;
+    border-left: 10px solid #44648c;
+}
+
+.search-form {
+    margin-top: 2%;
 }

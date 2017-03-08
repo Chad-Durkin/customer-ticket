@@ -159,6 +159,13 @@ namespace Ticketizer
                 Dictionary<string, object> model = new Dictionary<string, object>{{"Articles", Article.GetAll()}};
                 return View["full-article-list.cshtml", model];
             };
+
+            //Search with ticket assigned
+            Post["/full-article-list/search"] = parameters => {
+                Dictionary<string, object> model = new Dictionary<string, object>{{"Articles", Article.Search(Request.Form["search-field"])}};
+
+                return View["full-article-list.cshtml", model];
+            };
             //Specific article
             Get["/articles/{id}"] = parameters => {
                 Article model = Article.Find(parameters.id);
@@ -201,6 +208,14 @@ namespace Ticketizer
                 model.Add("ArticlesAttached", Article.GetAllAttached(parameters.id));
 
                 return View["ticket.cshtml", model];
+            };
+            //Search with ticket assigned
+            Post["/ticket/{id}/articles/search"] = parameters => {
+                Dictionary<string, object> model = ModelMaker();
+                model.Add("TicketId", parameters.id);
+                model.Add("Articles", Article.Search(Request.Form["search-field"]));
+
+                return View["article-list.cshtml", model];
             };
             //Get by department category
             Get["/category/{id}"] = parameters => {

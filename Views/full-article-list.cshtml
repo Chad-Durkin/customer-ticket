@@ -2,10 +2,17 @@
     Layout="Shared/_Layout.cshtml";
 }
 
+<h3>Articles</h3>
+<form class="" action="/full-article-list/search" method="post">
+    <input type="text" name="search-field" placeholder="Search articles">
+    <button class="btn" type="submit" name="button">Go</button>
+</form>
+<hr>
 @if(Model["Articles"].Count != 0)
 {
     @foreach(var article in Model["Articles"])
     {
         <a href="/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
+        <hr>
     }
 }

@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
-using System.Threading.Tasks;
+using System;
+using System.Linq;
+using System.Web;
+using System.Net;
+using System.Net.Mail;
 
 namespace Ticketizer
 {
@@ -10,6 +14,7 @@ namespace Ticketizer
     {
         public HomeModule()
         {
+
             //Home
             Get["/"] = _ => {
                 if(CurrentUser.currentUser.GetVerify())
@@ -47,7 +52,22 @@ namespace Ticketizer
 
                 return View["index.cshtml", ModelMaker()];
             };
-            //Tickets
+            //email sending function
+            Post["/sent-email"] = _ => {
+              MailMessage mail = new MailMessage("ticketizerapp@gmail.com", Request.Form["recipient"]);
+              SmtpClient client = new SmtpClient();
+              client.EnableSsl = true;
+              client.Port = 587;
+              client.DeliveryMethod = SmtpDeliveryMethod.Network;
+              client.UseDefaultCredentials = false;
+              client.Credentials = new NetworkCredential("ticketizerapp@gmail.com", "ticketizer123");
+              client.Host = "smtp.gmail.com";
+              mail.Subject = Request.Form["subject"];
+              mail.Body = Request.Form["message"];
+              client.Send(mail);
+                return View["index.cshtml", ModelMaker()];
+            };
+            //New Ticket
             Get["/new-ticket"] = _ => {
                 return View["new-ticket", ModelMaker()];
             };
@@ -65,6 +85,7 @@ namespace Ticketizer
 
                 Ticket testTicket = new Ticket(DateTime.Now, Request.Form["ticket-product"], Request.Form["ticket-description"], deptId, newUser.GetId(), Request.Form["severity"]);
                 testTicket.Save();
+
 
                 return View["index.cshtml", ModelMaker()];
             };

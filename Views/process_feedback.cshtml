@@ -1,0 +1,60 @@
+@*
+{
+    Layout="Shared/_Layout.cshtml";
+
+    var adminName = Request["admin-name"];
+    @* new MailAddress("gmkhanna@gmail.com", "Grinil Khanna"); *@
+    @* new MailAddress("gmkhanna@gmail.com", "Customer"); *@
+    var adminEmail = Request["admin-email"];
+    var customerName = Request["customer-name"];
+    var ticketId = Request["ticket-id"];
+    var ticketDetails = Request["ticket-details"];
+    var errorMessage = "";
+    var debuggingFlag = false;
+
+    try {
+        WebMail.SmtpServer = "Smtp.gmail.com";
+        WebMail.SmtpPort = 587;
+        WebMail.EnableSsl = true;
+        WebMail.DeliveryMethod = SmtpDeliveryMethod.Network;
+        WebMail.UseDefaultCredentials = false;
+        WebMail.Credentials = new NetworkCredential(fromAddress.Address, fromPassword);
+        WebMail.Smtp.Timeout = 10000;
+        WebMail.UserName = "gmkhanna@gmail.com";
+        WebMail.Password = "ticketizer";
+        WebMail.From = "gmkhanna@gmail.com";
+
+        //Send Email
+        WebMail.Send(to: customerEmail,
+            subject: "Help request from: " + adminName,
+            body: ticketDetails
+            );
+        }
+        catch (Exception exc)
+        {
+            errorMessage = exc.Message;
+        }
+    }
+
+<h3>Hello @customerName,</h3><br>
+<p>We are happy that you have contacted us regarding your @ticketDetails. Though we are sorry you are having trouble, this gives us an opportunity to gain a closer relationship with you and make sure we are improving our products. We have started a ticket regarding your inquiry by the id of: @ticketId. Please keep this for your records. We assure you that @adminName will work to solve this issue, and if you have any other questions, feel free to email @adminEmail.</p>
+<br>
+<p>We would enjoy it if you could fill out this survey to let us know how we are doing.</p>
+<br>
+<p>Thanks for your business,</p>
+<br>
+<p>Warm Regards,
+Grinil Khanna - Ticketizer CEO</p>
+@if(errorMessage == "")
+{
+    <p>This email has been sent to @customerName.</p>
+}
+else
+{
+    <p>This email failed to send successfully. Check SMTP Server faults.</p>
+    if (debuggingFlag)
+    {
+        <p>This error was reported:</p>
+        <p>@errorMessage</p>
+    }
+} *@

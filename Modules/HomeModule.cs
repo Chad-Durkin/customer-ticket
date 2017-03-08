@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
+using System;
 using System.Linq;
 using System.Web;
+using System.Net;
+using System.Net.Mail;
 
 namespace Ticketizer
 {
@@ -23,6 +26,20 @@ namespace Ticketizer
                 return View["index.cshtml", ModelMaker()];
             };
             Get["/fb-request-email"] = _ => {
+                return View["feedback_request.cshtml", ModelMaker()];
+            };
+            Post["/sent-email"] = _ => {
+              MailMessage mail = new MailMessage("ticketizerapp@gmail.com", Request.Form["recipient"]);
+              SmtpClient client = new SmtpClient();
+              client.EnableSsl = true;
+              client.Port = 587;
+              client.DeliveryMethod = SmtpDeliveryMethod.Network;
+              client.UseDefaultCredentials = false;
+              client.Credentials = new NetworkCredential("ticketizerapp@gmail.com", "ticketizer123");
+              client.Host = "smtp.gmail.com";
+              mail.Subject = "Dear Customer";
+              mail.Body = Request.Form["message"];
+              client.Send(mail);
                 return View["feedback_request.cshtml", ModelMaker()];
             };
 

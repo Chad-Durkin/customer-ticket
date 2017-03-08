@@ -2,10 +2,10 @@
     Layout="Shared/_Layout.cshtml";
 }
 
-
+<div class="container">
   <div class="row">
-      </form>
-      <form id="request-feedback-form" action="index.cshtml" method="post">
+    <div class="col s12">
+      <form id="request-feedback-form" action="/sent-email" method="post">
         <div class="form-group center-block">
           <label for="admin-name">Admin Name</label>
           <input type="text" class="form-control contact-input" id="admin-name" placeholder="Name" name="name">
@@ -24,10 +24,9 @@
         </div>
         <input type="text" name="_gotcha" class="display-none">
         <div class="text-center">
-          <button class="btn" type="submit" id="email-submit-btn" value="Send">
-            Submit
-          </button>
+          <button class="btn" type="submit" id="email-submit-btn">Submit</button>
         </div>
-        <span></span>
       </form>
+    </div>
   </div>
+</div>

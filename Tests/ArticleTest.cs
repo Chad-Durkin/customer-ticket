@@ -118,7 +118,7 @@ namespace Ticketizer
 
         //Search through articles by keyword
         [Fact]
-        public void Search_ForKnowledgeArticlesByKeyWords()
+        public void Search_ForKnowledgeArticlesByKeyWord()
         {
             //Arrange
             Article firstArticle = new Article("Fixing seatbelts", date1, "Here is some article text!");
@@ -133,36 +133,36 @@ namespace Ticketizer
             fifthArticle.Save();
 
             //Act
-            List<Article> searchedArticles = Article.SearchKeyWord("seatbelt");
+            List<Article> searchedArticles = Article.Search("seatbelt");
             List<Article> expectedArticles = new List<Article>{firstArticle, secondArticle, thirdArticle};
 
             //Assert
             Assert.Equal(searchedArticles, expectedArticles);
         }
 
-        // //Search through articles by more than one keyword
-        // [Fact]
-        // public void Search_ForKnowledgeArticlesByKeyWords()
-        // {
-        //     //Arrange
-        //     Article firstArticle = new Article("Fixing seatbelts", date1, "Here is some article text!");
-        //     firstArticle.Save();
-        //     Article secondArticle = new Article("Have a problem with your seatbelt?", date1, "Here is some article text!");
-        //     secondArticle.Save();
-        //     Article thirdArticle = new Article("What to do when seatbelt malfunctions", date1, "Here is some article text!");
-        //     thirdArticle.Save();
-        //     Article forthArticle = new Article("Help with a window problem", date1, "Here is some article text!");
-        //     forthArticle.Save();
-        //     Article fifthArticle = new Article("Help with a A door Problem", date1, "Here is some article text!");
-        //     fifthArticle.Save();
-        //
-        //     //Act
-        //     List<Article> searchedArticles = Article.SearchKeyWord("seatbelt fixing");
-        //     List<Article> expectedArticles = new List<Article>{firstArticle};
-        //
-        //     //Assert
-        //     Assert.Equal(searchedArticles, expectedArticles);
-        // }
+        //Search through articles by more than one keyword
+        [Fact]
+        public void Search_ForKnowledgeArticlesByMoreThanOneKeyWord()
+        {
+            //Arrange
+            Article firstArticle = new Article("Fixing seatbelts", date1, "Here is some article text!");
+            firstArticle.Save();
+            Article secondArticle = new Article("Have a problem with fixing your seatbelt?", date1, "Here is some article text!");
+            secondArticle.Save();
+            Article thirdArticle = new Article("What to do when seatbelt malfunctions", date1, "Here is some article text!");
+            thirdArticle.Save();
+            Article forthArticle = new Article("Help with a window problem", date1, "Here is some article text!");
+            forthArticle.Save();
+            Article fifthArticle = new Article("Help with a A door Problem", date1, "Here is some article text!");
+            fifthArticle.Save();
+
+            //Act
+            List<Article> searchedArticles = Article.Search("seatbelt fixing");
+            List<Article> expectedArticles = new List<Article>{firstArticle, secondArticle};
+
+            //Assert
+            Assert.Equal(expectedArticles, searchedArticles);
+        }
 
 
 

@@ -25,6 +25,10 @@ namespace Ticketizer
             Get["/fb-request-email"] = _ => {
                 return View["feedback_request.cshtml", ModelMaker()];
             };
+
+            Post["/"] = _ => {
+                return View["index.cshtml", ModelMaker()];
+            };
             //new ticket form
             Get["/new-ticket"] = _ => {
                 return View["new-ticket", ModelMaker()];

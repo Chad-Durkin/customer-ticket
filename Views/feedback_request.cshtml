@@ -4,7 +4,8 @@
 
 
   <div class="row">
-      <form id="request-feedback-form">
+      </form>
+      <form id="request-feedback-form" action="index.cshtml" method="post">
         <div class="form-group center-block">
           <label for="admin-name">Admin Name</label>
           <input type="text" class="form-control contact-input" id="admin-name" placeholder="Name" name="name">
@@ -14,12 +15,12 @@
           <input type="email" class="form-control contact-input" id="admin-email" placeholder="Email" name="email">
         </div>
         <div class="form-group center-block">
-          <label for="recipient">Recipient</label>
-          <textarea id="recipient" class="form-control contact-input" rows="3" placeholder="To" name="recipient"></textarea>
+          <label for="recipient">Recipient Email</label>
+          <textarea id="recipient" class="form-control contact-input" placeholder="To" name="recipient"></textarea>
         </div>
         <div class="form-group center-block">
           <label for="inputMessage">Message</label>
-          <textarea id="inputMessage" class="form-control contact-input" rows="3" placeholder="Your Message" name="message"></textarea>
+          <textarea id="inputMessage" class="form-control contact-input" placeholder="Your Message" name="message"></textarea>
         </div>
         <input type="text" name="_gotcha" class="display-none">
         <div class="text-center">

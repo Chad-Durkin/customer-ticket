@@ -539,16 +539,40 @@ namespace Ticketizer
             return numberOpen;
         }
 
+        // will return 01/01/0001 00:00:00 if there is no close date !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public DateTime GetClosedDate()
+        {
+            SqlConnection conn = DB.Connection();
+            conn.Open();
+
+            // SqlCommand cmd = new SqlCommand("SELECT COUNT(id) FROM tickets WHERE open_status = 1;", conn);
+
+            SqlCommand cmd = new SqlCommand("SELECT * FROM tickets WHERE id = @TicketId AND open_status = 0;", conn);
+            cmd.Parameters.Add(new SqlParameter("@TicketId", this.GetId()));
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            DateTime closeDate = new DateTime();
+
+            while(rdr.Read())
+            {
+                closeDate = rdr.GetDateTime(10);
+            }
+
+            DB.CloseSqlConnection(conn, rdr);
+
+            return closeDate;
+        }
+
         public static bool CheckCloseInWeek(DateTime closeDate)
         {
             var currentDay = DateTime.Today;
-            string DOW = currentDay.dateValue.ToString("ddd");
+            string DOW = currentDay.ToString("ddd");
             int increment = 1;
 
             while(DOW != "Sun")
             {
                 currentDay.AddDays(-increment);
-                string DOW = currentDay.ToString("ddd");
+                DOW = currentDay.ToString("ddd");
                 increment ++;
             }
 

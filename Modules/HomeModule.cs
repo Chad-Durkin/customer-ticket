@@ -78,7 +78,7 @@ namespace Ticketizer
 
             //New Ticket with user info populated
             Post["/new-ticket-user"] = _ => {
-                User.Update(Request.Form["user-id"], Request.Form["name"], Request.Form["address"], Request.Form["phone"], Request.Form["email"]);
+                User.Update(Request.Form["user-id"], Request.Form["user-name"], Request.Form["user-address"], Request.Form["user-phone"], Request.Form["user-email"]);
 
                 User newUser = User.Find(Request.Form["user-id"]);
 

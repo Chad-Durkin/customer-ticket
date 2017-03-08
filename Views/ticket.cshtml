@@ -32,9 +32,25 @@
             }
             <div class="input-field">
                 <select class="" name="severity" id="severity">
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
+                    @if(Model["Ticket"].GetSeverity() == "High")
+                    {
+                        <option value="High" selected>High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    }
+                    else if(Model["Ticket"].GetSeverity() == "Medium")
+                    {
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    }
+                    else
+                    {
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low" selected>Low</option>
+                    }
+
                 </select>
                 <label>Severity: </label>
             </div>

@@ -129,6 +129,16 @@ namespace Ticketizer
                 return View["new-article.cshtml"];
             };
 
+            Get["/full-article-list"] = _ => {
+                Dictionary<string, object> model = new Dictionary<string, object>{{"Articles", Article.GetAll()}};
+                return View["full-article-list.cshtml", model];
+            };
+
+            Get["/articles/{id}"] = parameters => {
+                Article model = Article.Find(parameters.id);
+
+                return View["browse-article.cshtml", model];
+            };
 
             Post["/new-article"] = _ => {
                 Article newArticle = new Article(Request.Form["title"], DateTime.Now, Request.Form["text"]);

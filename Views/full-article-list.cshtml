@@ -6,6 +6,6 @@
 {
     @foreach(var article in Model["Articles"])
     {
-        <a href="/ticket/@Model["TicketId"]/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
+        <a href="/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
     }
 }

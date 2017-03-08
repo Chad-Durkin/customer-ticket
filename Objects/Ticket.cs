@@ -16,8 +16,10 @@ namespace Ticketizer
         private int _userId;
         private int _open;
         private string _status;
+        private string _convertedTicketNumber;
 
-        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0, int open = 1, string status = "unresolved")
+
+        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0, int open = 1, string status = "Unresolved")
         {
             _id = id;
             _ticketNumber = ticketNumber;
@@ -28,6 +30,20 @@ namespace Ticketizer
             _severity = severity;
             _open = open;
             _status = status;
+            _convertedTicketNumber = ConvertTicketNumber(ticketNumber);
+        }
+
+        public static string ConvertTicketNumber(DateTime ticketNumber)
+        {
+            string newTicket;
+            newTicket = ticketNumber.ToString();
+            newTicket = newTicket.Replace("/", "");
+            newTicket = newTicket.Replace(":", "");
+            newTicket = newTicket.Replace(" ", "");
+            newTicket = newTicket.Replace("AM", "0");
+            newTicket = newTicket.Replace("PM", "1");
+
+            return newTicket;
         }
 
         public override bool Equals(System.Object otherTicket)
@@ -48,7 +64,8 @@ namespace Ticketizer
                 bool descriptionEquality = this.GetDescription() == newTicket.GetDescription();
                 bool openEquality = this.GetOpen() == newTicket.GetOpen();
                 bool statusEquality = this.GetStatus() == newTicket.GetStatus();
-                return (idEquality && ticketNumberEquality && productEquality && departmentIdEquality && userIdEquality && severityEquality && descriptionEquality && openEquality && statusEquality);
+                bool convertedTicketNumberEquality =this.GetConvertedTicketNum() == newTicket.GetConvertedTicketNum();
+                return (idEquality && ticketNumberEquality && productEquality && departmentIdEquality && userIdEquality && severityEquality && descriptionEquality && openEquality && statusEquality && convertedTicketNumberEquality);
             }
         }
 
@@ -57,7 +74,7 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, product, department_id, user_Id, severity, description, open_status, status) OUTPUT INSERTED.id VALUES (@ticketNumber, @product, @departmentId, @userId, @severity, @description, @openTicket, @statusTicket);", conn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO tickets (ticket_number, product, department_id, user_Id, severity, description, open_status, status, converted_ticket_number) OUTPUT INSERTED.id VALUES (@ticketNumber, @product, @departmentId, @userId, @severity, @description, @openTicket, @statusTicket, @ConvertedNumber);", conn);
 
             cmd.Parameters.Add(new SqlParameter("@ticketNumber", this.GetTicketNumber()));
             cmd.Parameters.Add(new SqlParameter("@product", this.GetProduct()));
@@ -67,6 +84,7 @@ namespace Ticketizer
             cmd.Parameters.Add(new SqlParameter("@description", this.GetDescription()));
             cmd.Parameters.Add(new SqlParameter("@openTicket", this.GetOpen()));
             cmd.Parameters.Add(new SqlParameter("@statusTicket", this.GetStatus()));
+            cmd.Parameters.Add(new SqlParameter("@ConvertedNumber", this.GetConvertedTicketNum()));
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -98,6 +116,7 @@ namespace Ticketizer
             string severityTicket = null;
             int openTicket = 0;
             string statusTicket = null;
+            string convTicketNum = null;
 
             while (rdr.Read())
             {
@@ -110,9 +129,11 @@ namespace Ticketizer
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
                 statusTicket = rdr.GetString(8);
+                convTicketNum = rdr.GetString(9);
             }
 
             Ticket foundTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, statusTicket);
+            foundTicket.SetConvertedTicketNum(convTicketNum);
 
             DB.CloseSqlConnection(conn, rdr);
 
@@ -139,6 +160,7 @@ namespace Ticketizer
             string severityTicket = null;
             int openTicket = 0;
             string statusTicket = null;
+            string convTicketNum = null;
 
             while (rdr.Read())
             {
@@ -151,7 +173,9 @@ namespace Ticketizer
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
                 statusTicket = rdr.GetString(8);
+                convTicketNum = rdr.GetString(9);
                 Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, statusTicket);
+                newTicket.SetConvertedTicketNum(convTicketNum);
                 allTickets.Add(newTicket);
             }
 
@@ -311,28 +335,21 @@ namespace Ticketizer
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
-            int idTicket = 0;
-            DateTime ticketNumberTicket = new DateTime();
-            int departmentIdTicket = 0;
-            string productTicket = null;
-            int userIdTicket = 0;
-            string descriptionTicket = null;
-            string severityTicket = null;
-            int openTicket = 0;
-            string ticketStatus = null;
 
             while (rdr.Read())
             {
-                idTicket = rdr.GetInt32(0);
-                ticketNumberTicket = rdr.GetDateTime(1);
-                productTicket = rdr.GetString(2);
-                departmentIdTicket = rdr.GetInt32(3);
-                severityTicket = rdr.GetString(4);
-                descriptionTicket = rdr.GetString(5);
-                userIdTicket = rdr.GetInt32(6);
-                openTicket = rdr.GetByte(7);
-                ticketStatus = rdr.GetString(8);
+                int idTicket = rdr.GetInt32(0);
+                DateTime ticketNumberTicket = rdr.GetDateTime(1);
+                string productTicket = rdr.GetString(2);
+                int departmentIdTicket = rdr.GetInt32(3);
+                string severityTicket = rdr.GetString(4);
+                string descriptionTicket = rdr.GetString(5);
+                int userIdTicket = rdr.GetInt32(6);
+                int openTicket = rdr.GetByte(7);
+                string ticketStatus = rdr.GetString(8);
+                string convTicketNum = rdr.GetString(9);
                 Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
+                newTicket.SetConvertedTicketNum(convTicketNum);
                 allTickets.Add(newTicket);
             }
 
@@ -354,27 +371,18 @@ namespace Ticketizer
 
             SqlDataReader rdr = cmd.ExecuteReader();
 
-            int idTicket = 0;
-            DateTime ticketNumberTicket = new DateTime();
-            int departmentIdTicket = 0;
-            string productTicket = null;
-            int userIdTicket = 0;
-            string descriptionTicket = null;
-            string severityTicket = null;
-            int openTicket = 0;
-            string ticketStatus = null;
-
             while (rdr.Read())
             {
-                idTicket = rdr.GetInt32(0);
-                ticketNumberTicket = rdr.GetDateTime(1);
-                productTicket = rdr.GetString(2);
-                departmentIdTicket = rdr.GetInt32(3);
-                severityTicket = rdr.GetString(4);
-                descriptionTicket = rdr.GetString(5);
-                userIdTicket = rdr.GetInt32(6);
-                openTicket = rdr.GetByte(7);
-                ticketStatus = rdr.GetString(8);
+                int idTicket = rdr.GetInt32(0);
+                DateTime ticketNumberTicket = rdr.GetDateTime(1);
+                string productTicket = rdr.GetString(2);
+                int departmentIdTicket = rdr.GetInt32(3);
+                string severityTicket = rdr.GetString(4);
+                string descriptionTicket = rdr.GetString(5);
+                int userIdTicket = rdr.GetInt32(6);
+                int openTicket = rdr.GetByte(7);
+                string ticketStatus = rdr.GetString(8);
+                string ticketConvNum = rdr.GetString(9);
                 Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
                 allTickets.Add(newTicket);
             }
@@ -406,6 +414,7 @@ namespace Ticketizer
             string severityTicket = null;
             int openTicket = 0;
             string ticketStatus = null;
+            string convTicketNum = null;
 
             while (rdr.Read())
             {
@@ -418,7 +427,9 @@ namespace Ticketizer
                 userIdTicket = rdr.GetInt32(6);
                 openTicket = rdr.GetByte(7);
                 ticketStatus = rdr.GetString(8);
+                convTicketNum =rdr.GetString(9);
                 Ticket newTicket = new Ticket(ticketNumberTicket, productTicket, descriptionTicket, departmentIdTicket, userIdTicket, severityTicket, idTicket, openTicket, ticketStatus);
+                newTicket.SetConvertedTicketNum(convTicketNum);
                 allTickets.Add(newTicket);
             }
 
@@ -513,6 +524,16 @@ namespace Ticketizer
         public void SetDescription(string description)
         {
             _description = description;
+        }
+
+        public string GetConvertedTicketNum()
+        {
+            return _convertedTicketNumber;
+        }
+
+        public void SetConvertedTicketNum(string newConverted)
+        {
+            _convertedTicketNumber = newConverted;
         }
 
 

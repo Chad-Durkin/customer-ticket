@@ -12,7 +12,6 @@ namespace Ticketizer
         {
             //Home
             Get["/"] = _ => {
-
                 if(CurrentUser.currentUser.GetVerify())
                 {
                     return View["index.cshtml", ModelMaker()];

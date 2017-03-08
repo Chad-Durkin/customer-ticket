@@ -207,6 +207,10 @@ namespace Ticketizer
         {
             Ticket.DeleteAll();
             Admin.DeleteAll();
+            User.DeleteAll();
+            Department.DeleteAll();
+            Article.DeleteAll();
+            Note.DeleteAll();
         }
     }
 }

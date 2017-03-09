@@ -436,7 +436,9 @@ namespace Ticketizer
             Dictionary<string, object> model = new Dictionary<string, object>{
                 {"Departments", Department.GetAll()},
                 {"Admins", Admin.GetAll()},
-                {"Tickets", Ticket.GetAllOpen()}
+                {"Tickets", Ticket.GetAllOpen()}.
+                {"ClosedTicketNum", Ticket.GetNumberClosedThisWeek()},
+                {"OpenTicketNum", Ticket.GetAllOpen().Count}
             };
 
             return model;

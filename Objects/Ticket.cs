@@ -8,7 +8,7 @@ namespace Ticketizer
     public class Ticket
     {
         private int _id;
-        private DateTime _ticketNumber;
+        private DateTime _ticketNumber; //Date created, not actual ticket#
         private int _departmentId;
         private string _product;
         private string _description;

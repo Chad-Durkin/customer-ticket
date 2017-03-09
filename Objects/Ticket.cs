@@ -586,6 +586,52 @@ namespace Ticketizer
             return false;
         }
 
+
+        public static int OpenedThisMonth()
+        {
+            DateTime current = DateTime.Now;
+            int currentMonth = current.Month;
+
+            int count = 0;
+            List<Ticket> newList = Ticket.GetAll();
+            foreach (Ticket item in newList)
+            {
+
+                if (item.GetTicketNumber().Month == currentMonth)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public static int ClosedThisMonth()
+        {
+            DateTime current = DateTime.Now;
+            int currentMonth = current.Month;
+
+            int count = 0;
+            List<Ticket> newList = Ticket.GetAllClosed();
+            foreach (Ticket item in newList)
+            {
+
+                if (item.GetTicketNumber().Month == currentMonth)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+
+        public static int PercentClosedInMonth()
+        {
+            int ClosingPercent = (ClosedThisMonth() * 10 / OpenedThisMonth() * 10);
+            {
+                return ClosingPercent;
+            }
+        }
+
         //Getters/Setters
         public int GetId()
         {

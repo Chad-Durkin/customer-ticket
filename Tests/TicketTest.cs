@@ -227,11 +227,65 @@ namespace Ticketizer
             Assert.Equal(1, Ticket.GetNumberClosed());
         }
 
-        // [Fact]
-        // {
-        //     Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
-        //     newTicket.Save();
-        // }
+        [Fact]
+        public void Test_OpenedThisMonth()
+        {
+            DateTime DateCurrentOpen = new DateTime(2017, 3, 9, 8, 30, 10);
+            DateTime DateLastMonth = new DateTime(2017, 2, 2, 2, 30, 20);
+            DateTime DateCurrentClosed = new DateTime(2017, 3, 9, 8, 30, 20);
+            Ticket CurrentOpen = new Ticket(DateCurrentOpen, "Computer", "Bugs", 3, 1, "med", 4, 1);
+            CurrentOpen.Save();
+            Ticket LastMonth = new Ticket(DateLastMonth, "Computer", "Bugs", 3, 1, "med", 2, 1);
+            LastMonth.Save();
+            Ticket CurrentClosed = new Ticket(DateCurrentClosed, "Computer", "Bugs", 3, 1, "med", 3, 0);
+            CurrentClosed.Save();
+
+            int result = Ticket.OpenedThisMonth();
+            int expected = 2;
+
+            Assert.Equal(expected, result);
+            Console.WriteLine(Ticket.GetAll());
+        }
+
+        [Fact]
+        public void Test_ClosedThisMonth()
+        {
+            DateTime DateCurrentOpen = new DateTime(2017, 3, 9, 8, 30, 10);
+            DateTime DateLastMonth = new DateTime(2017, 2, 2, 2, 30, 20);
+            DateTime DateCurrentClosed = new DateTime(2017, 3, 9, 8, 22, 22);
+            Ticket CurrentOpen = new Ticket(DateCurrentOpen, "Computer", "Bugs", 3, 1, "med", 4, 1);
+            CurrentOpen.Save();
+            Ticket LastMonth = new Ticket(DateLastMonth, "Computer", "Bugs", 3, 1, "med", 2, 1);
+            LastMonth.Save();
+            Ticket CurrentClosed = new Ticket(DateCurrentClosed, "Computer", "Bugs", 3, 1, "med", 3, 0);
+            CurrentClosed.Save();
+
+            int result = Ticket.ClosedThisMonth();
+            int expected = 1;
+
+            Assert.Equal(expected, result);
+            Console.WriteLine(Ticket.GetAll());
+        }
+
+        [Fact]
+        public void Test_PercentClosure()
+        {
+            DateTime DateCurrentOpen = new DateTime(2017, 3, 9, 8, 30, 10);
+            DateTime DateLastMonth = new DateTime(2017, 2, 2, 2, 30, 20);
+            DateTime DateCurrentClosed = new DateTime(2017, 3, 9, 8, 22, 22);
+            Ticket CurrentOpen = new Ticket(DateCurrentOpen, "Computer", "Bugs", 3, 1, "med", 4, 1);
+            CurrentOpen.Save();
+            Ticket LastMonth = new Ticket(DateLastMonth, "Computer", "Bugs", 3, 1, "med", 2, 1);
+            LastMonth.Save();
+            Ticket CurrentClosed = new Ticket(DateCurrentClosed, "Computer", "Bugs", 3, 1, "med", 3, 0);
+            CurrentClosed.Save();
+
+            int result = Ticket.PercentClosedInMonth();
+            int expected = 50;
+
+            Assert.Equal(expected, result);
+            Console.WriteLine(Ticket.GetAll());
+        }
 
 
         public void Dispose()

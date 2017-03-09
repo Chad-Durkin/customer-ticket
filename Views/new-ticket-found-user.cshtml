@@ -13,19 +13,21 @@
     <label for="user-email">Email:</label>
     <input type="text" name="user-email" value="@Model["User"].GetEmail()">
     <input type="hidden" name="user-id" value="@Model["User"].GetId()">
-    <hr>
     <label for="ticket-product">Product:</label>
     <input type="text" name="ticket-product">
     <label for="ticket-description">Description:</label>
     <textarea rows="8" name="ticket-description"></textarea>
     @if(Model["Departments"].Count != 0)
     {
-        <select class="" name="department-id">
-            @foreach(var department in Model["Departments"])
-            {
-                <option value="@department.GetId()">@department.GetName()</option>
-            }
-        </select>
+        <div class="input-field">
+            <select class="" name="department-id">
+                @foreach(var department in Model["Departments"])
+                {
+                    <option value="@department.GetId()">@department.GetName()</option>
+                }
+            </select>
+            <label for="department-id">Department:</label>
+        </div>
     }
     <select class="" name="severity">
         <option>High</option>

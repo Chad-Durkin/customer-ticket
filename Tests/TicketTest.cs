@@ -287,6 +287,18 @@ namespace Ticketizer
             Console.WriteLine(Ticket.GetAll());
         }
 
+        // Analytics
+        [Fact]
+        public void CheckIfTicketWasClosedThisWeek()
+        {
+            DateTime TicketNumber = new DateTime(2008, 5, 1, 8, 30, 52);
+            Ticket newTicket = new Ticket(TicketNumber, "Computer", "Bugs", 3, 1);
+            newTicket.Save();
+            Ticket.CloseTicket(newTicket.GetId());
+            Assert.Equal(true, Ticket.CheckCloseInWeek(newTicket.GetClosedDate()));
+
+        }
+
 
         public void Dispose()
         {

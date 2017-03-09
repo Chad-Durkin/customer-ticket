@@ -17,23 +17,30 @@
         {
             <p>There are no departments in the queue</p>
         }
-        <p><a href="/archive">Archive</a></p>
+        <br>
+        <h5>Stats</h5>
+        <p>Current Open Tickets: @Model["OpenTicketNum"]</p>
+        <p>Closed Tickets This Week: @Model["ClosedTicketNum"]</p>
+        <hr>
+        <h5><a href="/archive">Archive</a></h5>
     </div>
     <div class="col s9">
         <h5>Tickets</h5>
         @if(Model["Tickets"].Count != 0)
         {
-            foreach(var ticket in Model["Tickets"])
-            {
-                <a href="/ticket/@ticket.GetId()">
-                    <div class="ticket hoverable">
-                        <p>Ticket Number: @ticket.GetConvertedTicketNum() </p>
-                        <p>Severity: @ticket.GetSeverity() </p>
-                        <p>Status: @ticket.GetStatus()</p>
-                    </div>
-                </a>
-                <hr>
-            }
+            <div class="tickets-div">
+                @foreach(var ticket in Model["Tickets"])
+                {
+                    <a href="/ticket/@ticket.GetId()">
+                        <div class="ticket hoverable">
+                            <p>Ticket Number: @ticket.GetConvertedTicketNum() </p>
+                            <p>Severity: @ticket.GetSeverity() </p>
+                            <p>Status: @ticket.GetStatus()</p>
+                        </div>
+                    </a>
+                    <hr>
+                }
+            </div>
         }
         else
         {

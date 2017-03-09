@@ -8,7 +8,7 @@ namespace Ticketizer
     public class Ticket
     {
         private int _id;
-        private DateTime _ticketNumber;
+        private DateTime _ticketNumber; //Date created, not actual ticket#
         private int _departmentId;
         private string _product;
         private string _description;
@@ -292,10 +292,11 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId;", conn);
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId; UPDATE tickets SET closed_date = @Date where id = @TicketId", conn);
 
             cmd.Parameters.Add(new SqlParameter("@TicketOpen", openStatus));
             cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+            cmd.Parameters.Add(new SqlParameter("@Date", DateTime.Today));
 
             cmd.ExecuteNonQuery();
 
@@ -565,15 +566,14 @@ namespace Ticketizer
 
         public static bool CheckCloseInWeek(DateTime closeDate)
         {
-            var currentDay = DateTime.Today;
+            DateTime currentDay = DateTime.Today;
             string DOW = currentDay.ToString("ddd");
-            int increment = 1;
+            int increment = -1;
 
             while(DOW != "Sun")
             {
-                currentDay.AddDays(-increment);
+                currentDay = currentDay.AddDays(increment);
                 DOW = currentDay.ToString("ddd");
-                increment ++;
             }
 
             var firstDay = currentDay;
@@ -585,7 +585,6 @@ namespace Ticketizer
             }
             return false;
         }
-
 
         public static int OpenedThisMonth()
         {
@@ -630,6 +629,20 @@ namespace Ticketizer
             {
                 return ClosingPercent;
             }
+        }
+
+        public static int GetNumberClosedThisWeek()
+        {
+            List<Ticket> allClosed = Ticket.GetAllClosed();
+            List<Ticket> closedThisWeek = new List<Ticket>{};
+            foreach(Ticket ticket in allClosed)
+            {
+                if(Ticket.CheckCloseInWeek(ticket.GetClosedDate()))
+                {
+                    closedThisWeek.Add(ticket);
+                }
+            }
+            return closedThisWeek.Count;
         }
 
         //Getters/Setters

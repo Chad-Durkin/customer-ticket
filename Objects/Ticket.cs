@@ -292,10 +292,11 @@ namespace Ticketizer
             SqlConnection conn = DB.Connection();
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId;", conn);
+            SqlCommand cmd = new SqlCommand("UPDATE tickets SET open_status = @TicketOpen OUTPUT INSERTED.open_status WHERE id = @TicketId; UPDATE tickets SET closed_date = @Date where id = @TicketId", conn);
 
             cmd.Parameters.Add(new SqlParameter("@TicketOpen", openStatus));
             cmd.Parameters.Add(new SqlParameter("@TicketId", ticketId));
+            cmd.Parameters.Add(new SqlParameter("@Date", DateTime.Today));
 
             cmd.ExecuteNonQuery();
 
@@ -565,15 +566,16 @@ namespace Ticketizer
 
         public static bool CheckCloseInWeek(DateTime closeDate)
         {
-            var currentDay = DateTime.Today;
+            DateTime currentDay = DateTime.Today;
             string DOW = currentDay.ToString("ddd");
-            int increment = 1;
+            int increment = -1;
 
             while(DOW != "Sun")
             {
-                currentDay.AddDays(-increment);
+                currentDay = currentDay.AddDays(increment);
                 DOW = currentDay.ToString("ddd");
-                increment ++;
+                Console.WriteLine(DOW);
+                // increment --;
             }
 
             var firstDay = currentDay;

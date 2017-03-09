@@ -574,8 +574,6 @@ namespace Ticketizer
             {
                 currentDay = currentDay.AddDays(increment);
                 DOW = currentDay.ToString("ddd");
-                Console.WriteLine(DOW);
-                // increment --;
             }
 
             var firstDay = currentDay;

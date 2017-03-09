@@ -23,17 +23,19 @@
         <h5>Tickets</h5>
         @if(Model["Tickets"].Count != 0)
         {
-            foreach(var ticket in Model["Tickets"])
-            {
-                <a href="/ticket/@ticket.GetId()">
-                    <div class="ticket hoverable">
-                        <p>Ticket Number: @ticket.GetConvertedTicketNum() </p>
-                        <p>Severity: @ticket.GetSeverity() </p>
-                        <p>Status: @ticket.GetStatus()</p>
-                    </div>
-                </a>
-                <hr>
-            }
+            <div class="tickets-div">
+                @foreach(var ticket in Model["Tickets"])
+                {
+                    <a href="/ticket/@ticket.GetId()">
+                        <div class="ticket hoverable">
+                            <p>Ticket Number: @ticket.GetConvertedTicketNum() </p>
+                            <p>Severity: @ticket.GetSeverity() </p>
+                            <p>Status: @ticket.GetStatus()</p>
+                        </div>
+                    </a>
+                    <hr>
+                }
+            </div>
         }
         else
         {

@@ -2,7 +2,7 @@
     Layout="Shared/_Layout.cshtml";
 }
 <div class="row">
-    <div class="col s6">
+    <div class="col s6 ticket-body">
         <h3>Ticket#: @Model["Ticket"].GetConvertedTicketNum()</h3>
         <form class="" action="/ticket/@Model["Ticket"].GetId()" method="post">
             <input type="hidden" name="_method" value="PATCH">
@@ -89,53 +89,44 @@
         </form>
     </div>
     <div class="col s6">
-
-      <h5>Send Email:</h5>
-      <div class="">
-        <form id="request-feedback-form" action="/sent-email" method="post">
-          <input type="hidden" name="subject" value="Regarding your ticket # @Model["Ticket"].GetConvertedTicketNum()">
-          <div class="form-group center-block">
-            <label for="admin-name">Admin Name</label>
-            <input type="text" class="form-control contact-input" id="admin-name" placeholder="Name" name="name">
-          </div>
-          <div class="form-group center-block">
-            <label for="admin-email">Admin Email</label>
-            <input type="email" class="form-control contact-input" id="admin-email" placeholder="Email" name="email">
-          </div>
-          <div class="form-group center-block">
-            <label for="recipient">Recipient Email</label>
-            <input id="recipient" class="form-control contact-input" value="@Model["User"].GetEmail()" name="recipient">
-          </div>
-          <div class="form-group center-block">
-            <label for="inputMessage">Message</label>
-            <textarea id="inputMessage" class="form-control contact-input" placeholder="Your Message" name="message"></textarea>
-          </div>
-          <div class="text-center">
-            <button class="btn" type="submit" id="email-submit-btn">Submit</button>
-          </div>
-        </form>
-      </div>
-      <hr>
-      <br>
-
+        <button id="send-email-button" class="btn" type="button" name="button">Send Email</button>
         <a class="btn" href="/ticket/@Model["Ticket"].GetId()/articles">Find Article</a>
-        @if(Model["ArticlesAttached"].Count != 0)
-        {
-            <h5>Articles Attached:</h5>
-            @foreach(var article in Model["ArticlesAttached"])
-            {
-                <a href="/ticket/@Model["Ticket"].GetId()/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
-            }
-        }
-
-        <form action="/ticket/@Model["Ticket"].GetId()/add-note" method="post">
-            <label for="note">Add Note: </label>
-            <textarea name="note"></textarea>
-            <button class="btn" type="submit" name="button">Submit</button>
-        </form>
+        <button class="btn" id="add-note-button" type="button" name="button">Add Note</button>
+        <div class="send-email-div">
+            <form id="request-feedback-form" action="/sent-email" method="post">
+                <input type="hidden" name="subject" value="Regarding your ticket # @Model["Ticket"].GetConvertedTicketNum()">
+                <div class="form-group center-block">
+                    <label for="admin-name">Admin Name</label>
+                    <input type="text" class="form-control contact-input" id="admin-name" placeholder="Name" name="name">
+                </div>
+                <div class="form-group center-block">
+                    <label for="admin-email">Admin Email</label>
+                    <input type="email" class="form-control contact-input" id="admin-email" placeholder="Email" name="email">
+                </div>
+                <div class="form-group center-block">
+                    <label for="recipient">Recipient Email</label>
+                    <input id="recipient" class="form-control contact-input" value="@Model["User"].GetEmail()" name="recipient">
+                </div>
+                <div class="form-group center-block">
+                    <label for="inputMessage">Message</label>
+                    <textarea id="inputMessage" class="form-control contact-input" placeholder="Your Message" name="message"></textarea>
+                </div>
+                <div class="text-center">
+                    <button class="btn" type="submit" id="email-submit-btn">Send</button>
+                </div>
+            </form>
+        </div>
+        <div class="add-note-div">
+            <form action="/ticket/@Model["Ticket"].GetId()/add-note" method="post">
+                <label for="note">Add Note: </label>
+                <textarea name="note"></textarea>
+                <button class="btn" type="submit" name="button">Add</button>
+            </form>
+        </div>
 
         @if(Model["Notes"].Count != 0)
         {
+            <br>
             <h5>Notes Attached:</h5>
             @foreach(var note in Model["Notes"])
             {
@@ -147,7 +138,16 @@
         }
         else
         {
-          <hr>
+            <hr>
+        }
+
+        @if(Model["ArticlesAttached"].Count != 0)
+        {
+            <h5>Articles Attached:</h5>
+            @foreach(var article in Model["ArticlesAttached"])
+            {
+                <a href="/ticket/@Model["Ticket"].GetId()/articles/@article.GetId()"><p>@article.GetTitle()</p></a>
+            }
         }
     </div>
 </div>

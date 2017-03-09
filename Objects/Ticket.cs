@@ -588,6 +588,21 @@ namespace Ticketizer
             return false;
         }
 
+        public static int GetNumberClosedThisWeek()
+        {
+            List<Ticket> allClosed = Ticket.GetAllClosed();
+            List<Ticket> closedThisWeek = new List<Ticket>{};
+            foreach(Ticket ticket in allClosed)
+            {
+                if(Ticket.CheckCloseInWeek(ticket.GetClosedDate()))
+                {
+                    closedThisWeek.Add(ticket);
+                }
+            }
+
+            return closedThisWeek.Count;
+        }
+
         //Getters/Setters
         public int GetId()
         {

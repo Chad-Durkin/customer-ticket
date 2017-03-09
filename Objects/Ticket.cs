@@ -19,7 +19,7 @@ namespace Ticketizer
         private string _convertedTicketNumber;
 
 
-        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "low", int id = 0, int open = 1, string status = "Unresolved")
+        public Ticket(DateTime ticketNumber, string product, string description, int departmentId, int userId, string severity = "Low", int id = 0, int open = 1, string status = "Unresolved")
         {
             _id = id;
             _ticketNumber = ticketNumber;

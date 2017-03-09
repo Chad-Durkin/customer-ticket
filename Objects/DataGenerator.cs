@@ -7,6 +7,8 @@ namespace Ticketizer
 {
     public class KAGenerator
     {
+
+        //Generate Article
         public static List<Article> GenerateArticle()
         {
             List<Article> fakeNews = new List<Article>{};
@@ -60,6 +62,53 @@ namespace Ticketizer
             "To tweak your lock screen to your liking, select the Start Start symbol button, then select Settings  > Personalization  > Lock screen. Try changing the background to a favorite photo or slide show, or choose any combination of detailed and quick status notifications to show you upcoming calendar events, social network updates, and other app and system notifications.",
             "OneDrive is free online storage that comes with your Microsoft account. Save your files there and you'll be able to get to them from any PC, tablet, or phone. The basics. To save a doc you're working on to OneDrive, select a OneDrive folder from the list of save locations. To move files to OneDrive, open File Explorer and then drag them into a OneDrive folder. Screenshot of SkyDrive File being dragged into a SkyDrive folder. No Internet? No problem. Files you save to OneDrive are available online at OneDrive.com and offline on your PC. That means you can use them anytime, even when you're not connected to the Internet. When you reconnect, OneDrive updates the online versions with changes you made offline. Offline files come in handy when you're stuck without Wi-Fi, but they also take up space on your PC. If you're running low on storage space, here's how to keep fewer OneDrive files offline: Stay in sync. File Explorer icons show you the sync status of your offline folders and files. Image of sync icon It's in sync with online version. Image of syncing icon It's getting in sync. Image of out-of-sync icon The version on your PC is out of sync. To find out why, go to the right side of the taskbar, select the Show hidden icons arrow, press and hold (or right-click) OneDrive OneDrive icon, and then select View sync problems. At the Office. Learn how to create and share Office docs through the OneDrive website—and get the apps that can sync and edit docs on the go—in the Get started with OneDrive eBook."
         };
+
+
+        //Generate Tickets
+
+        public static void GenerateTickets()
+        {
+
+            Admin firstAdmin = new Admin("Admin", "admin", "password");
+            firstAdmin.Save();
+            //Users
+            List<string> names = new List<string>{"John Doe", "Jane Doe", "Pizza Doe", "Super Dude", "The Flash", "Luke Skywalker", "Darth Vader", "Kim Kardashian", "Harrison Ford", "Brad Pitt", "Angelina Jolie"};
+            List<string> addresses = new List<string>{"123 St St.", "555 Street in Place", "Pizza Box", "Somewhere in Mexico", "500 W Ave, New York", "Melvin's Backyard"};
+            List<string> phones = new List<string>{"555-555-5555", "555-555-5556", "555-555-5557"};
+            List<string> emails = new List<string>{"john@johndoe.com", "oldperson@aol.com", "ticketizzer@twizler.com", "theycallmejesus@jesusrules.com", "Iwantwhatyougot@evilhacker.com", "melvin@yaboi.com", "proteinshakes@getrippedbro.com"};
+
+            for(int index = 0; index < 50; index++)
+            {
+                Random r = new Random();
+                User newUser = new User(names[r.Next(0, names.Count - 1)], addresses[r.Next(0, addresses.Count - 1)], phones[r.Next(0, phones.Count - 1)], emails[r.Next(0, emails.Count - 1)]);
+                newUser.Save();
+            }
+
+            //Department Generator
+            Department newDepartment = new Department("Sales");
+            newDepartment.Save();
+            Department other = new Department("Repair");
+            other.Save();
+            Department another = new Department("Business");
+            another.Save();
+            Department anotherOne = new Department("Network");
+            anotherOne.Save();
+            Department anotherTwo = new Department("Tech");
+            anotherTwo.Save();
+
+            //Ticket Generator
+            List<string> products = new List<string>{"Computer", "Penguins", "Keyboards", "Headphones", "Cars", "Graphics Cards", "56k Modem", "Server", "Windows 95", "Windows NT", "Windows Vista", "Windows ME", "Macbook Pro (JK, those don't break)"};
+            List<string> descriptions = new List<string>{"I HAF PROBLEM, PLS HALP!", "Dear Sir, I'm email you from Nigeria where I am Nigerian prince. Please provide your honary credit card", "Dammit Melvin!"};
+
+            for(int index = 0; index < 50; index++)
+            {
+                Random r = new Random();
+                Ticket newTicket = new Ticket(DateTime.Now, products[r.Next(0, products.Count - 1)], descriptions[r.Next(0, descriptions.Count - 1)], Department.GetAll()[r.Next(0, Department.GetAll().Count - 1)].GetId(), User.GetAll()[r.Next(0, User.GetAll().Count - 1)].GetId());
+                newTicket.Save();
+
+            }
+        }
+
     }
 
 

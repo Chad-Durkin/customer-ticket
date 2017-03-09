@@ -3,6 +3,17 @@ body, footer {
     padding-bottom: 10%;
 }
 
+.load-data {
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    border-radius: 50%;
+
+}
+
 .login-div {
     height: 100vh;
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
-using System;
 using System.Linq;
 using System.Web;
 using System.Net;
@@ -25,6 +24,12 @@ namespace Ticketizer
                 {
                     return View["login.cshtml"];
                 }
+            };
+
+            Get["/demo-data"] = _ =>{
+                KAGenerator.GenerateTickets();
+                KAGenerator.GenerateArticle();
+                return View["login.cshtml"];
             };
             //Login
             Post["/login"] = _ =>

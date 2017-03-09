@@ -1,43 +1,47 @@
 @{
     Layout="Shared/_Layout.cshtml";
 }
-
-<form class="" action="/find-user" method="post">
-    <input type="text" name="find-user" placeholder="Find user by name">
-    <button class="btn" type="submit" name="button">Search</button>
-</form>
-<hr>
-<h3>New Ticket</h3>
-<form class="" action="/new-ticket" method="post">
-    <label for="user-name">Name:</label>
-    <input type="text" name="user-name">
-    <label for="user-address">Address:</label>
-    <input type="text" name="user-address">
-    <label for="user-phone">Phone:</label>
-    <input type="text" name="user-phone">
-    <label for="user-email">Email:</label>
-    <input type="text" name="user-email">
-    <label for="ticket-product">Product:</label>
-    <input type="text" name="ticket-product">
-    <label for="ticket-description">Description:</label>
-    <textarea rows="8" name="ticket-description"></textarea>
-    @if(Model["Departments"].Count != 0)
-    {
-        <div class="input-field">
-            <select class="" name="department-id">
-                @foreach(var department in Model["Departments"])
-                {
-                    <option value="@department.GetId()">@department.GetName()</option>
-                }
+<div class="row">
+    <div class="col s6 ticket-body">
+        <h3>New Ticket</h3>
+        <form class="" action="/new-ticket" method="post">
+            <label for="user-name">Name:</label>
+            <input type="text" name="user-name">
+            <label for="user-address">Address:</label>
+            <input type="text" name="user-address">
+            <label for="user-phone">Phone:</label>
+            <input type="text" name="user-phone">
+            <label for="user-email">Email:</label>
+            <input type="text" name="user-email">
+            <label for="ticket-product">Product:</label>
+            <input type="text" name="ticket-product">
+            <label for="ticket-description">Description:</label>
+            <textarea rows="8" name="ticket-description"></textarea>
+            @if(Model["Departments"].Count != 0)
+            {
+                <div class="input-field">
+                    <select class="" name="department-id">
+                        @foreach(var department in Model["Departments"])
+                        {
+                            <option value="@department.GetId()">@department.GetName()</option>
+                        }
+                    </select>
+                    <label for="department-id">Department:</label>
+                </div>
+            }
+            <select class="" name="severity">
+                <option>High</option>
+                <option>Medium</option>
+                <option selected>Low</option>
             </select>
-            <label for="department-id">Department:</label>
-        </div>
-    }
-    <select class="" name="severity">
-        <option>High</option>
-        <option>Medium</option>
-        <option selected>Low</option>
-    </select>
 
-    <button class="btn" type="submit" name="button">Save</button>
-</form>
+            <button class="btn" type="submit" name="button">Save</button>
+        </form>
+    </div>
+    <div class="col s6">
+        <form class="" action="/find-user" method="post">
+            <input type="text" name="find-user" placeholder="Find user by name">
+            <button class="btn" type="submit" name="button">Search</button>
+        </form>
+    </div>
+</div>

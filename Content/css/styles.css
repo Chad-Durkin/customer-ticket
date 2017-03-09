@@ -3,6 +3,10 @@ body, footer {
     padding-bottom: 10%;
 }
 
+
+.search-bar {
+    margin-top: -7%;
+}
 .load-data {
     height: 20px;
     width: 20px;
@@ -18,7 +22,7 @@ body, footer {
     height: 100vh;
 }
 
-.ticketizer-logo, .login-form {
+.ticketizer-logo, .login-form, .send-email-div, .add-note-div {
     display: none;
 }
 
@@ -30,6 +34,7 @@ body, footer {
 .btn {
     background-color: #44648c;
     color: white !important;
+    margin-bottom: 1%;
 }
 
 .btn:hover {

@@ -80,7 +80,7 @@ namespace Ticketizer
             for(int index = 0; index < 50; index++)
             {
                 Random r = new Random();
-                User newUser = new User(names[r.Next(0, names.Count - 1)], addresses[r.Next(0, addresses.Count - 1)], phones[r.Next(0, phones.Count - 1)], emails[r.Next(0, emails.Count - 1)]);
+                User newUser = new User(names[r.Next(0, names.Count)], addresses[r.Next(0, addresses.Count)], phones[r.Next(0, phones.Count)], emails[r.Next(0, emails.Count)]);
                 newUser.Save();
             }
 
@@ -103,7 +103,7 @@ namespace Ticketizer
             for(int index = 0; index < 50; index++)
             {
                 Random r = new Random();
-                Ticket newTicket = new Ticket(DateTime.Now, products[r.Next(0, products.Count - 1)], descriptions[r.Next(0, descriptions.Count - 1)], Department.GetAll()[r.Next(0, Department.GetAll().Count - 1)].GetId(), User.GetAll()[r.Next(0, User.GetAll().Count - 1)].GetId());
+                Ticket newTicket = new Ticket(DateTime.Now, products[r.Next(0, products.Count)], descriptions[r.Next(0, descriptions.Count)], Department.GetAll()[r.Next(0, Department.GetAll().Count)].GetId(), User.GetAll()[r.Next(0, User.GetAll().Count)].GetId());
                 newTicket.Save();
 
             }
